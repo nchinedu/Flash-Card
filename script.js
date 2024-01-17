@@ -96,7 +96,7 @@ function displayQuestion() {
         document.getElementById('error-message').textContent = 'Error loading question. Please try again.';
     }
 }
-function
+
 // Function to handle user input
 function handleUserInput(selectedOption) {
     try {
