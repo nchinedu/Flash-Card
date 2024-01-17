@@ -105,3 +105,8 @@ body {
 #progress-bar-container.completed {
     display: none; /* Hide progress bar when completed */
 }
+
+footer {
+    position: fixed;
+    margin-top: 500px;
+}

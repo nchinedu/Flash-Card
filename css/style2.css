@@ -12,5 +12,5 @@ body {
 canvas {
     max-width: 400px;
     width: 100%;
-    height: auto;
+    /*height: auto;*/
 }

@@ -196,9 +196,20 @@ function resetQuiz() {
 
 
 function exitQuiz() {
-    // Redirect to a blank page or any desired destination
-    window.location.href = 'results.html';
+    // Check if already on the results page
+    if (window.location.pathname.includes('results.html')) {
+        return;  // Exit the function to avoid continuous execution
+    }
+
+    // Create chart data
+    const correctPercentage = (userScore / quizQuestions.length) * 100;
+    const incorrectPercentage = 100 - correctPercentage;
+
+    // Redirect to the results page with URL parameters
+    const resultsUrl = './results.html';
+    window.location.href = resultsUrl + '?correctPercentage=' + correctPercentage + '&incorrectPercentage=' + incorrectPercentage;
 }
+
 
 // Initial display
 displayQuestion();
