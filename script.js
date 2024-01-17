@@ -51,40 +51,29 @@ const quizQuestions = [
 ];
 
 
-// Quiz State
 let currentQuestionIndex = 0;
 let userScore = 0;
 
-// Event listener for the "Next" button
 document.getElementById('next-button').addEventListener('click', () => {
     moveToNextQuestion();
 });
 
-// Event listener for the modal close button
 document.querySelector('.close').addEventListener('click', closeModal);
 
-// Function to display the current question
 function displayQuestion() {
     try {
-        // Fetch the current question from the quizQuestions array
         const currentQuestion = quizQuestions[currentQuestionIndex];
 
-        // Check if the current question is undefined (out of bounds)
         if (!currentQuestion) {
             throw new Error('No more questions available.');
         }
 
-        // Update the question text on the UI
-        document.getElementById('question-text').innerHTML = `
-        <p>Category: ${currentQuestion.category}</p>
-        <p>Difficulty: ${currentQuestion.difficulty}</p>
-        <h2>${currentQuestion.question}</h2>
-    `;
-        // Update the options on the UI
-        const optionsContainer = document.getElementById('options-section');
-        optionsContainer.innerHTML = ''; // Clear previous options
+        document.getElementById('question-text').innerHTML = `<h2>${currentQuestion.question}</h2>`;
 
-        currentQuestion.options.forEach((option, index) => {
+        const optionsContainer = document.getElementById('options-section');
+        optionsContainer.innerHTML = '';
+
+        currentQuestion.options.forEach((option) => {
             const optionButton = document.createElement('button');
             optionButton.textContent = option;
             optionButton.addEventListener('click', () => handleUserInput(option));
@@ -92,92 +81,124 @@ function displayQuestion() {
         });
     } catch (error) {
         console.error('Error displaying question:', error.message);
-        // Display an error message to the user on the UI
         document.getElementById('error-message').textContent = 'Error loading question. Please try again.';
     }
 }
 
-// Function to handle user input
 function handleUserInput(selectedOption) {
     try {
         const currentQuestion = quizQuestions[currentQuestionIndex];
 
-        const selectedOptionIndex = currentQuestion.options.indexOf(selectedOption);
-
         if (selectedOption === currentQuestion.correctAnswer) {
-            // Update user score for correct answer
             userScore++;
         }
 
-        document.querySelectorAll('.options button')[selectedOptionIndex].classList.add(selectedOption === currentQuestion.correctAnswer ? 'correct' : 'incorrect');
-        if (selectedOption !== currentQuestion.correctAnswer) {
-            const correctAnswerIndex = currentQuestion.options.indexOf(currentQuestion.correctAnswer);
-            document.querySelectorAll('.options button')[correctAnswerIndex].classList.add('correct');
-        }
-        // Move to the next question after a brief delay
+        const feedbackSection = document.getElementById('feedback-section');
+        feedbackSection.textContent = selectedOption === currentQuestion.correctAnswer ? 'Correct!' : 'Incorrect!';
+
         setTimeout(() => {
-            // Clear feedback
-            document.querySelectorAll('.options button').forEach(button => {
-                button.classList.remove('correct', 'incorrect');
-            });
-            // Move to the next question
+            feedbackSection.textContent = '';
             moveToNextQuestion();
-        }, 1000); // 1000 milliseconds (1 second) delay, adjust as needed
+        }, 1000);
     } catch (error) {
         console.error('Error handling user input:', error.message);
-        // Optionally, display an error message to the user on the UI
         document.getElementById('error-message').textContent = 'Error processing your answer. Please try again.';
     }
 }
 
-// Function to move to the next question
 function moveToNextQuestion() {
-    // Move to the next question index
     currentQuestionIndex++;
 
-    // Check if the quiz is completed
     if (currentQuestionIndex < quizQuestions.length) {
-        // Display the next question
         displayQuestion();
     } else {
-        // The quiz is completed, show the completion modal
         openModal();
-        // Display the user's score in the modal
         document.getElementById('user-score').textContent = userScore;
     }
     updateProgressBar();
 }
-
 
 function updateProgressBar() {
     const progress = (currentQuestionIndex / quizQuestions.length) * 100;
     document.getElementById('progress-bar').style.width = `${progress}%`;
 }
 
-// Function to open the completion modal
 function openModal() {
     const modal = document.getElementById('quiz-completion-modal');
     modal.style.display = 'block';
 
-    // Optionally, you can perform additional actions when the modal opens
+    // Display the user's score in the modal
+    document.getElementById('user-score').textContent = userScore;
+
+    // Add buttons for trying again and exiting
+    const modalContent = document.querySelector('.modal-content');
+    const buttonsContainer = document.createElement('div');
+    buttonsContainer.classList.add('buttons-container');
+
+    const tryAgainButton = document.createElement('button');
+    tryAgainButton.textContent = 'Try Again';
+    tryAgainButton.addEventListener('click', tryAgain);
+
+    const exitButton = document.createElement('button');
+    exitButton.textContent = 'Exit';
+    exitButton.addEventListener('click', exitQuiz);
+
+    buttonsContainer.appendChild(tryAgainButton);
+    buttonsContainer.appendChild(exitButton);
+    modalContent.appendChild(buttonsContainer);
 
     // Add a class to indicate completion
     document.getElementById('quiz-container').classList.add('completed');
     modal.classList.add('completed');
 }
 
-// Function to close the completion modal
+
 function closeModal() {
     const modal = document.getElementById('quiz-completion-modal');
     modal.style.display = 'none';
 
-    // Reset the quiz state for a new quiz
     currentQuestionIndex = 0;
     userScore = 0;
 
-    // Remove the class for completion
     document.getElementById('quiz-container').classList.remove('completed');
     modal.classList.remove('completed');
-
-    // Optionally, you can perform additional actions when the modal closes
 }
+
+function tryAgain() {
+    closeModal();
+    resetQuiz();
+    displayQuestion();
+}
+
+function resetQuiz() {
+    currentQuestionIndex = 0;
+    userScore = 0;
+
+    // Remove highlighting and progress bar
+    document.querySelectorAll('.options button').forEach(button => {
+        button.classList.remove('correct', 'incorrect');
+    });
+    document.getElementById('progress-bar').style.width = '0%';
+
+    // Clear feedback
+    document.getElementById('feedback-section').textContent = '';
+
+    // Remove buttons in modal
+    const buttonsContainer = document.querySelector('.buttons-container');
+    if (buttonsContainer) {
+        buttonsContainer.parentNode.removeChild(buttonsContainer);
+    }
+
+    // Remove completion class
+    document.getElementById('quiz-container').classList.remove('completed');
+    document.getElementById('quiz-completion-modal').classList.remove('completed');
+}
+
+
+function exitQuiz() {
+    // Redirect to a blank page or any desired destination
+    window.location.href = 'results.html';
+}
+
+// Initial display
+displayQuestion();
