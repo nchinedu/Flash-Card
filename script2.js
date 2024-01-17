@@ -17,12 +17,12 @@ if (!resultsChart.classList.contains('chart-rendered')) {
 
     // Create chart options
     const chartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
+        responsive: false,
+        maintainAspectRatio: false
     };
 
     // Create the chart
-    const ctx = resultsChart.getContext('3d');
+    const ctx = resultsChart.getContext('2d');
     new Chart(ctx, {
         type: 'doughnut',
         data: chartData,
