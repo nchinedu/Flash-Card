@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+          integrity="sha384-rz1F8zmTL1eLqRPTO+Kq4uXb5IH01COd0jwi2XRLMW5VIUVi+5Vf5QDBy2KB9Fdf" crossorigin="anonymous">
+
+    <title>Flashcard Quiz App</title>
+</head>
+<body>
+
+<!-- Quiz Interface -->
+<div id="quiz-container">
+    <div id="progress-bar-container">
+        <div id="progress-bar"></div>
+    </div>
+    <div id="question-section">
+        <h2 id="question-text">Question text goes here</h2>
+    </div>
+
+    <div id="options-section" class="options"></div>
+
+    <div id="feedback-section"></div>
+
+    <div id="timer"></div>
+
+    <button id="next-button">Next</button>
+
+    <!-- Add the progress bar container here -->
+</div>
+
+<!-- Quiz Completion Modal -->
+<div id="quiz-completion-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Quiz Completed!</h2>
+        <p>Your Score: <span id="user-score">0</span></p>
+    </div>
+</div>
+
+<!-- Error Message Container -->
+<div id="error-message"></div>
+<footer>
+    <p>&copy; 2024 Flashcard Group13 Quiz App</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
