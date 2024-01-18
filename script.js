@@ -1,3 +1,16 @@
+// Shuffle function to randomize the order of questions
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function shuffleOptions(question) {
+    shuffleArray(question.options);
+}
+
+
 const quizQuestions = [
     // Medical Questions
     {
@@ -53,7 +66,7 @@ const quizQuestions = [
 
 let currentQuestionIndex = 0;
 let userScore = 0;
-
+shuffleArray(quizQuestions);
 document.getElementById('next-button').addEventListener('click', () => {
     moveToNextQuestion();
 });
@@ -68,6 +81,7 @@ function displayQuestion() {
             throw new Error('No more questions available.');
         }
 
+        shuffleOptions(currentQuestion);
         document.getElementById('question-text').innerHTML = `<h2>${currentQuestion.question}</h2>`;
 
         const optionsContainer = document.getElementById('options-section');
@@ -88,23 +102,45 @@ function displayQuestion() {
 function handleUserInput(selectedOption) {
     try {
         const currentQuestion = quizQuestions[currentQuestionIndex];
+        const optionsContainer = document.getElementById('options-section');
+
+        optionsContainer.querySelectorAll('button').forEach(button => {
+            button.disabled = true;
+        });
+
+        const selectedOptionIndex = currentQuestion.options.indexOf(selectedOption);
 
         if (selectedOption === currentQuestion.correctAnswer) {
             userScore++;
+            optionsContainer.querySelector(`button:nth-child(${selectedOptionIndex + 1})`).classList.add('correct');
+        } else {
+            optionsContainer.querySelector(`button:nth-child(${selectedOptionIndex + 1})`).classList.add('incorrect');
+            const correctOptionIndex = currentQuestion.options.indexOf(currentQuestion.correctAnswer);
+            optionsContainer.querySelector(`button:nth-child(${correctOptionIndex + 1})`).classList.add('correct');
         }
 
-        const feedbackSection = document.getElementById('feedback-section');
-        feedbackSection.textContent = selectedOption === currentQuestion.correctAnswer ? 'Correct!' : 'Incorrect!';
+        optionsContainer.querySelectorAll('button').forEach(button => {
+            button.disabled = true;
+        });
 
+        // Move to the next question after a brief delay
         setTimeout(() => {
-            feedbackSection.textContent = '';
+            // Clear styles
+            optionsContainer.querySelectorAll('button').forEach(button => {
+                button.classList.remove('correct', 'incorrect');
+                button.disabled = false; // Re-enable buttons for the next question
+            });
+
+            // Move to the next question
             moveToNextQuestion();
-        }, 1000);
+        }, 1000); // 1000 milliseconds (1 second) delay, adjust as needed
     } catch (error) {
         console.error('Error handling user input:', error.message);
+        // Optionally, display an error message to the user on the UI
         document.getElementById('error-message').textContent = 'Error processing your answer. Please try again.';
     }
 }
+
 
 function moveToNextQuestion() {
     currentQuestionIndex++;

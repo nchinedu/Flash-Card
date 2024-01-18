@@ -14,13 +14,15 @@ body {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    max-width: 400px; /* Set a maximum width */
-    width: 100%; /* Make it fluid */
+    max-width: 600px; /* Set a maximum width */
+    width: 90%; /* Make it fluid */
     text-align: center;
+    position: relative;
 }
 
 #question-section {
-    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
 }
 
 #options-section button {
@@ -28,15 +30,21 @@ body {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
-    background-color: #4caf50;
+    background-color: lightgrey;
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 
-#options-section button:hover {
-    background-color: #45a049;
+
+#options-section button.correct {
+    background-color: #8bc34a;
+    color: #333; /* Change text color for correct option */
+}
+
+#options-section button.incorrect {
+    background-color: #f44336;
 }
 
 #feedback-section {
@@ -46,11 +54,10 @@ body {
 
 #progress-bar-container {
     width: 100%;
-    height: 20px;
+    height: 4px; /* Adjust the height as needed */
     background-color: #ddd;
-    border-radius: 10px;
-    margin-top: 20px;
-    overflow: hidden;
+    margin-top: 10px;
+    position: relative; /* Set the position to relative */
 }
 
 #progress-bar {
@@ -58,6 +65,10 @@ body {
     width: 0;
     background-color: #4caf50;
     border-radius: 10px;
+    position: absolute; /* Set the position to absolute */
+    top: 0;
+    left: 0;
+    transition: width 0.5s ease-out; /* Add a transition effect */
 }
 
 .modal {
@@ -108,5 +119,50 @@ body {
 
 footer {
     position: fixed;
-    margin-top: 500px;
+    bottom: 20px; /* Adjust the distance from the bottom as needed */
+    width: 100%;
+    text-align: center;
+    color: #555;
+}
+
+#feedback-section {
+    margin-top: 10px;
+    color: #333;
+}
+
+.modal {
+    display: none;
+    /* ... */
+}
+
+.modal-content {
+    /* ... */
+}
+
+.close {
+    /* ... */
+}
+
+@media only screen and (max-width: 600px) {
+    /* Adjust styles for smaller screens */
+    #quiz-container {
+        padding: 10px;
+    }
+
+    #options-section button {
+        font-size: 14px;
+    }
+
+    #progress-bar-container {
+        height: 6px;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }

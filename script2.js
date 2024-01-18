@@ -18,7 +18,9 @@ if (!resultsChart.classList.contains('chart-rendered')) {
     // Create chart options
     const chartOptions = {
         responsive: false,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        width: 400,
+        height: 400
     };
 
     // Create the chart
