@@ -7,73 +7,66 @@ function shuffleArray(array) {
 }
 
 function shuffleOptions(question) {
-    shuffleArray(question.options);
+    if (selectedCategory === 'all' || question.category === selectedCategory) {
+        shuffleArray(question.options);
+    }
 }
 
-
 const quizQuestions = [
-    // Medical Questions
     {
         category: 'Medical',
         difficulty: 'Medium',
-        question: 'What is the powerhouse of the cell?',
-        options: ['Mitochondria', 'Nucleus', 'Endoplasmic Reticulum', 'Golgi Apparatus'],
+        question: 'What is the name of the cell\'s powerhouse?',
+        options: ['Nucleus', 'Mitochondria', 'Endoplasmic Reticulum', 'Golgi Apparatus'],
         correctAnswer: 'Mitochondria'
     },
-    // ... (Other Medical Questions)
-
-    // General Knowledge Questions
     {
         category: 'General Knowledge',
         difficulty: 'Easy',
-        question: 'Which planet is known as the Red Planet?',
+        question: 'Which planet, known as the Red Planet, is the fourth planet from the Sun and has a reddish appearance?',
         options: ['Earth', 'Mars', 'Venus', 'Jupiter'],
         correctAnswer: 'Mars'
     },
-    // ... (Other General Knowledge Questions)
-
-    // Psychological Questions
     {
         category: 'Psychological',
         difficulty: 'Hard',
-        question: 'Who developed the stages of cognitive development theory?',
+        question: 'Who developed the stages of cognitive development theory, including sensorimotor, preoperational, concrete operational, and formal operational stages?',
         options: ['Jean Piaget', 'Sigmund Freud', 'Erik Erikson', 'Abraham Maslow'],
         correctAnswer: 'Jean Piaget'
     },
-    // ... (Other Psychological Questions)
-
-    // Anime Questions
     {
         category: 'Anime',
         difficulty: 'Medium',
-        question: 'Who is the main protagonist in "Naruto"?',
+        question: 'Who is the main protagonist in the anime "Naruto"?',
         options: ['Sasuke Uchiha', 'Hinata Hyuga', 'Naruto Uzumaki', 'Sakura Haruno'],
         correctAnswer: 'Naruto Uzumaki'
     },
-    // ... (Other Anime Questions)
-
-    // Web-Based/Internet Programming Questions
     {
         category: 'Web-Based/Internet Programming',
         difficulty: 'Easy',
-        question: 'What does CSS stand for?',
+        question: 'What does CSS stand for in the context of web development?',
         options: ['Counter Strike: Source', 'Cascading Style Sheet', 'Computer Style Sheet', 'Creative Style System'],
         correctAnswer: 'Cascading Style Sheet'
     },
-    // ... (Other Web-Based/Internet Programming Questions)
 ];
 
-
+let selectedCategory = 'all';
 let currentQuestionIndex = 0;
 let userScore = 0;
 shuffleArray(quizQuestions);
-document.getElementById('next-button').addEventListener('click', () => {
-    moveToNextQuestion();
-});
 
 document.querySelector('.close').addEventListener('click', closeModal);
 
+function changeCategory() {
+    selectedCategory = document.getElementById('category-dropdown').value;
+    currentQuestionIndex = 0; // Reset question index when changing category
+    displayQuestion();
+}
+
 function displayQuestion() {
+    const filteredQuestions = selectedCategory === 'all'
+        ? quizQuestions
+        : quizQuestions.filter(question => question.category === selectedCategory);
     try {
         const currentQuestion = quizQuestions[currentQuestionIndex];
 
@@ -103,13 +96,10 @@ function handleUserInput(selectedOption) {
     try {
         const currentQuestion = quizQuestions[currentQuestionIndex];
         const optionsContainer = document.getElementById('options-section');
-
         optionsContainer.querySelectorAll('button').forEach(button => {
             button.disabled = true;
         });
-
         const selectedOptionIndex = currentQuestion.options.indexOf(selectedOption);
-
         if (selectedOption === currentQuestion.correctAnswer) {
             userScore++;
             optionsContainer.querySelector(`button:nth-child(${selectedOptionIndex + 1})`).classList.add('correct');
@@ -118,29 +108,23 @@ function handleUserInput(selectedOption) {
             const correctOptionIndex = currentQuestion.options.indexOf(currentQuestion.correctAnswer);
             optionsContainer.querySelector(`button:nth-child(${correctOptionIndex + 1})`).classList.add('correct');
         }
-
         optionsContainer.querySelectorAll('button').forEach(button => {
             button.disabled = true;
         });
 
-        // Move to the next question after a brief delay
         setTimeout(() => {
-            // Clear styles
             optionsContainer.querySelectorAll('button').forEach(button => {
                 button.classList.remove('correct', 'incorrect');
                 button.disabled = false; // Re-enable buttons for the next question
             });
 
-            // Move to the next question
-            moveToNextQuestion();
+            moveToNextQuestion(); // Automatically move to the next question
         }, 1000); // 1000 milliseconds (1 second) delay, adjust as needed
     } catch (error) {
         console.error('Error handling user input:', error.message);
-        // Optionally, display an error message to the user on the UI
         document.getElementById('error-message').textContent = 'Error processing your answer. Please try again.';
     }
 }
-
 
 function moveToNextQuestion() {
     currentQuestionIndex++;
@@ -155,9 +139,14 @@ function moveToNextQuestion() {
 }
 
 function updateProgressBar() {
-    const progress = (currentQuestionIndex / quizQuestions.length) * 100;
+    const filteredQuestions = selectedCategory === 'all'
+        ? quizQuestions
+        : quizQuestions.filter(question => question.category === selectedCategory);
+
+    const progress = (currentQuestionIndex / filteredQuestions.length) * 100;
     document.getElementById('progress-bar').style.width = `${progress}%`;
 }
+
 
 function openModal() {
     const modal = document.getElementById('quiz-completion-modal');
@@ -186,8 +175,8 @@ function openModal() {
     // Add a class to indicate completion
     document.getElementById('quiz-container').classList.add('completed');
     modal.classList.add('completed');
+    displayScoreChart();
 }
-
 
 function closeModal() {
     const modal = document.getElementById('quiz-completion-modal');
@@ -203,6 +192,7 @@ function closeModal() {
 function tryAgain() {
     closeModal();
     resetQuiz();
+    shuffleArray(quizQuestions);
     displayQuestion();
 }
 
@@ -228,8 +218,8 @@ function resetQuiz() {
     // Remove completion class
     document.getElementById('quiz-container').classList.remove('completed');
     document.getElementById('quiz-completion-modal').classList.remove('completed');
+    shuffleArray(quizQuestions);
 }
-
 
 function exitQuiz() {
     // Check if already on the results page
@@ -246,6 +236,41 @@ function exitQuiz() {
     window.location.href = resultsUrl + '?correctPercentage=' + correctPercentage + '&incorrectPercentage=' + incorrectPercentage;
 }
 
+function displayScoreChart() {
+    const canvas = document.getElementById('scoreChart');
+    const ctx = canvas.getContext('2d');
 
-// Initial display
+    const correctPercentage = (userScore / quizQuestions.length) * 100;
+    const incorrectPercentage = 100 - correctPercentage;
+
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Correct', 'Incorrect'],
+            datasets: [{
+                data: [correctPercentage, incorrectPercentage],
+                backgroundColor: ['#4caf50', '#f44336'],
+            }],
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Quiz Results',
+                fontSize: 16, // Adjust title font size
+            },
+            legend: {
+                display: true,
+                position: 'bottom', // Position of the legend
+            },
+            responsive: true, // Enable responsiveness
+            maintainAspectRatio: false, // Disable default aspect ratio
+        },
+    });
+
+    const buttonsContainer = document.querySelector('.buttons-container');
+    if (buttonsContainer) {
+        buttonsContainer.style.display = 'none';
+    }
+}
+
 displayQuestion();

@@ -1,5 +1,4 @@
 body {
-    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
     display: flex;
@@ -7,44 +6,75 @@ body {
     justify-content: center;
     height: 100vh;
     background-color: #f0f0f0;
+    font-family: 'Roboto', sans-serif; /* Change 'Roboto' to your preferred font */
+    font-size: 16px; /* Adjust the base font size */
+    line-height: 1.6;
+    transition: background-color 0.3s ease;
 }
 
 #quiz-container {
-    background-color: #fff;
+    background-color: var(--background-color);
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    max-width: 600px; /* Set a maximum width */
-    width: 90%; /* Make it fluid */
+    max-width: 600px;
+    width: 90%;
     text-align: center;
     position: relative;
+    font-size: 18px;
+    animation: fadeIn 0.5s forwards;
+}
+
+h2 {
+    font-size: 1.5em; /* Adjust the font size for question headings */
 }
 
 #question-section {
     opacity: 0;
     animation: fadeIn 0.5s forwards;
+    margin-bottom: 20px;
 }
+
+#options-section {
+    margin-bottom: 20px; /* Add margin to create space below the options */
+}
+
+#options-section button.correct,
+#options-section button.incorrect {
+    animation: fadeIn 0.5s forwards; /* Apply fadeIn animation to revealed answers */
+}
+
 
 #options-section button {
     display: block;
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
-    background-color: lightgrey;
-    color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    font-style: oblique;
+    font-weight: 900;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
+#next-button,
+#previous-button,
+#submit-button {
+    margin-right: 10px;
+}
 
 #options-section button.correct {
-    background-color: #8bc34a;
-    color: #333; /* Change text color for correct option */
+    background-color: var(--success-color);
+    color: var(--text-color);
 }
 
 #options-section button.incorrect {
-    background-color: #f44336;
+    background-color: var(--error-color);
+    color: var(--text-color);
 }
 
 #feedback-section {
@@ -55,20 +85,20 @@ body {
 #progress-bar-container {
     width: 100%;
     height: 4px; /* Adjust the height as needed */
-    background-color: #ddd;
     margin-top: 10px;
     position: relative; /* Set the position to relative */
+    background-color: var(--background-color);
 }
 
 #progress-bar {
     height: 100%;
     width: 0;
-    background-color: #4caf50;
     border-radius: 10px;
     position: absolute; /* Set the position to absolute */
     top: 0;
     left: 0;
     transition: width 0.5s ease-out; /* Add a transition effect */
+    background-color: var(--success-color);
 }
 
 .modal {
@@ -84,22 +114,25 @@ body {
 }
 
 .modal-content {
-    background-color: #fefefe;
     margin: 15% auto;
     padding: 20px;
-    border: 1px solid #888;
     border-radius: 8px;
     max-width: 80%; /* Set a maximum width */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--primary-color);
+    font-size: 16px;
+    animation: fadeIn 0.5s forwards;
 }
 
 .close {
-    color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
+    color: var(--primary-color);
 }
 
 .close:hover,
@@ -122,7 +155,8 @@ footer {
     bottom: 20px; /* Adjust the distance from the bottom as needed */
     width: 100%;
     text-align: center;
-    color: #555;
+    color: var(--text-color);
+    font-size: 14px;
 }
 
 #feedback-section {
@@ -156,6 +190,54 @@ footer {
     #progress-bar-container {
         height: 6px;
     }
+}
+
+#options-section button:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Add this to your CSS */
+.question-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.question-grid button {
+    margin: 5px;
+    padding: 5px 10px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#error-message {
+    color: var(--error-color);
+    font-size: 14px;
+}
+
+.question-grid button:hover {
+    background-color: #45a049;
+}
+
+:root {
+    --primary-color: #3498db; /* Blue */
+    --success-color: #2ecc71; /* Green */
+    --error-color: #e74c3c; /* Red */
+    --background-color: #ffffff; /* White */
+    --text-color: #333333; /* Dark Gray */
 }
 
 @keyframes fadeIn {
