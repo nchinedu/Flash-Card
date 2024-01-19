@@ -248,3 +248,82 @@ footer {
         opacity: 1;
     }
 }
+
+/* Add these styles for better visual appeal */
+/* Add these styles for the grid layout and indicators */
+.feedback-container {
+    margin-top: 20px;
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.feedback-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Modify styles for the bullet points and indicators */
+.options-container {
+    list-style-type: none;
+    padding: 0;
+}
+
+.option {
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+}
+
+.option-text {
+    margin-right: 10px;
+}
+
+
+.option p {
+    margin: 0;
+}
+
+/* Adjust the indicator styles */
+.option::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 10px;
+    font-size: 18px;
+}
+
+.option.correct-answer::after {
+    content: ' (✔)';
+    color: #4caf50; /* Green for correct answers */
+}
+
+.option.incorrect-answer::after {
+    content: ' (❌)';
+    color: #f44336; /* Red for incorrect answers */
+}
+
+/* Hover effect */
+.option:hover {
+    background-color: #ddd;
+}
+
+/* Add styles for the grid format */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.chart-container {
+    grid-column: span 1;
+    /* Adjust the size of the chart container */
+    max-width: 200px;
+    max-height: 200px;
+}
+

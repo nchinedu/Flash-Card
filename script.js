@@ -1,4 +1,3 @@
-// Shuffle function to randomize the order of questions
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -57,16 +56,8 @@ shuffleArray(quizQuestions);
 
 document.querySelector('.close').addEventListener('click', closeModal);
 
-function changeCategory() {
-    selectedCategory = document.getElementById('category-dropdown').value;
-    currentQuestionIndex = 0; // Reset question index when changing category
-    displayQuestion();
-}
 
 function displayQuestion() {
-    const filteredQuestions = selectedCategory === 'all'
-        ? quizQuestions
-        : quizQuestions.filter(question => question.category === selectedCategory);
     try {
         const currentQuestion = quizQuestions[currentQuestionIndex];
 
@@ -75,6 +66,11 @@ function displayQuestion() {
         }
 
         shuffleOptions(currentQuestion);
+
+        // Check if the question has been answered before
+        const answeredCorrectly = currentQuestion.answeredCorrectly === true;
+        const answeredIncorrectly = currentQuestion.answeredCorrectly === false;
+
         document.getElementById('question-text').innerHTML = `<h2>${currentQuestion.question}</h2>`;
 
         const optionsContainer = document.getElementById('options-section');
@@ -83,6 +79,16 @@ function displayQuestion() {
         currentQuestion.options.forEach((option) => {
             const optionButton = document.createElement('button');
             optionButton.textContent = option;
+
+            // Add classes based on the previous answer
+            if (answeredCorrectly) {
+                optionButton.classList.add('correct');
+            } else if (answeredIncorrectly && option === currentQuestion.correctAnswer) {
+                optionButton.classList.add('correct');
+            } else if (answeredIncorrectly && option === currentQuestion.userAnswer) {
+                optionButton.classList.add('incorrect');
+            }
+
             optionButton.addEventListener('click', () => handleUserInput(option));
             optionsContainer.appendChild(optionButton);
         });
@@ -92,6 +98,7 @@ function displayQuestion() {
     }
 }
 
+
 function handleUserInput(selectedOption) {
     try {
         const currentQuestion = quizQuestions[currentQuestionIndex];
@@ -99,6 +106,9 @@ function handleUserInput(selectedOption) {
         optionsContainer.querySelectorAll('button').forEach(button => {
             button.disabled = true;
         });
+        currentQuestion.userAnswer = selectedOption;
+        currentQuestion.answeredCorrectly = selectedOption === currentQuestion.correctAnswer;
+
         const selectedOptionIndex = currentQuestion.options.indexOf(selectedOption);
         if (selectedOption === currentQuestion.correctAnswer) {
             userScore++;
@@ -126,27 +136,35 @@ function handleUserInput(selectedOption) {
     }
 }
 
-function moveToNextQuestion() {
-    currentQuestionIndex++;
+function displayIncorrectAnswers() {
+    const modalContent = document.querySelector('.modal-content');
+    const incorrectAnswersContainer = document.createElement('div');
+    incorrectAnswersContainer.classList.add('incorrect-answers-container');
 
-    if (currentQuestionIndex < quizQuestions.length) {
-        displayQuestion();
-    } else {
-        openModal();
-        document.getElementById('user-score').textContent = userScore;
-    }
-    updateProgressBar();
+    // Filter questions that were answered incorrectly
+    const incorrectQuestions = quizQuestions.filter(question => question.answeredCorrectly === false);
+
+    incorrectQuestions.forEach((question, index) => {
+        const questionContainer = document.createElement('div');
+        questionContainer.classList.add('question-container');
+
+        const questionText = document.createElement('p');
+        questionText.textContent = `${index + 1}. ${question.question}`;
+        questionContainer.appendChild(questionText);
+
+        const userAnswer = document.createElement('p');
+        userAnswer.textContent = `Your Answer: ${question.userAnswer}`;
+        questionContainer.appendChild(userAnswer);
+
+        const correctAnswer = document.createElement('p');
+        correctAnswer.textContent = `Correct Answer: ${question.correctAnswer}`;
+        questionContainer.appendChild(correctAnswer);
+
+        // incorrectAnswersContainer.appendChild(questionContainer);
+    });
+
+    modalContent.appendChild(incorrectAnswersContainer);
 }
-
-function updateProgressBar() {
-    const filteredQuestions = selectedCategory === 'all'
-        ? quizQuestions
-        : quizQuestions.filter(question => question.category === selectedCategory);
-
-    const progress = (currentQuestionIndex / filteredQuestions.length) * 100;
-    document.getElementById('progress-bar').style.width = `${progress}%`;
-}
-
 
 function openModal() {
     const modal = document.getElementById('quiz-completion-modal');
@@ -175,7 +193,31 @@ function openModal() {
     // Add a class to indicate completion
     document.getElementById('quiz-container').classList.add('completed');
     modal.classList.add('completed');
+
+    // Display incorrect answers
+    displayIncorrectAnswers();
     displayScoreChart();
+}
+
+function moveToNextQuestion() {
+    currentQuestionIndex++;
+
+    if (currentQuestionIndex < quizQuestions.length) {
+        displayQuestion();
+    } else {
+        openModal();
+        document.getElementById('user-score').textContent = userScore;
+    }
+    updateProgressBar();
+}
+
+function updateProgressBar() {
+    const filteredQuestions = selectedCategory === 'all'
+        ? quizQuestions
+        : quizQuestions.filter(question => question.category === selectedCategory);
+
+    const progress = (currentQuestionIndex / filteredQuestions.length) * 100;
+    document.getElementById('progress-bar').style.width = `${progress}%`;
 }
 
 function closeModal() {
@@ -237,9 +279,64 @@ function exitQuiz() {
 }
 
 function displayScoreChart() {
+    const modalContent = document.querySelector('.modal-content');
+
+    // Create a container for the grid layout
+    const gridContainer = document.createElement('div');
+    gridContainer.classList.add('grid-container');
+
+    // Create a container for the chart and add it to the grid
+    const chartContainer = document.createElement('div');
+    chartContainer.classList.add('chart-container');
+    gridContainer.appendChild(chartContainer);
+
+    // Iterate through quiz questions to display feedback
+    quizQuestions.forEach((question, index) => {
+        const feedbackItem = document.createElement('div');
+        feedbackItem.classList.add('feedback-item');
+
+        // Display question text
+        const questionText = document.createElement('p');
+        questionText.textContent = `${index + 1}. ${question.question}`;
+        feedbackItem.appendChild(questionText);
+
+        // Create a container for options
+        const optionsContainer = document.createElement('ul');
+        optionsContainer.classList.add('options-container');
+
+        // Iterate through options to display them
+        question.options.forEach((option, optionIndex) => {
+            const optionElement = document.createElement('li');
+            optionElement.classList.add('option');
+
+            // Display the option text
+            const optionText = document.createElement('span');
+            optionText.classList.add('option-text');
+            optionText.textContent = option;
+            optionElement.appendChild(optionText);
+
+            // Display (❌) or (✔) based on correctness
+            if (question.userAnswer === option) {
+                // optionElement.innerHTML += question.userAnswer === question.correctAnswer ? ' (✔)' : ' (❌)';
+                optionElement.classList.add(question.userAnswer === question.correctAnswer ? 'correct-answer' : 'incorrect-answer');
+            } else if (option === question.correctAnswer) {
+                // optionElement.innerHTML += ' (✔)';
+                optionElement.classList.add('correct-answer');
+            }
+
+            optionsContainer.appendChild(optionElement);
+        });
+
+        feedbackItem.appendChild(optionsContainer);
+        gridContainer.appendChild(feedbackItem);
+    });
+
+    // Add the grid container to the modal content
+    modalContent.appendChild(gridContainer);
+
+
     const canvas = document.getElementById('scoreChart');
     const ctx = canvas.getContext('2d');
-
     const correctPercentage = (userScore / quizQuestions.length) * 100;
     const incorrectPercentage = 100 - correctPercentage;
 
@@ -262,7 +359,6 @@ function displayScoreChart() {
                 display: true,
                 position: 'bottom', // Position of the legend
             },
-            responsive: true, // Enable responsiveness
             maintainAspectRatio: false, // Disable default aspect ratio
         },
     });
