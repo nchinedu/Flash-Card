@@ -168,6 +168,8 @@ function displayIncorrectAnswers() {
 
 function openModal() {
     const modal = document.getElementById('quiz-completion-modal');
+    const body = document.body;
+    body.classList.add('modal-open');
     modal.style.display = 'block';
 
     // Display the user's score in the modal
@@ -199,6 +201,19 @@ function openModal() {
     displayScoreChart();
 }
 
+function closeModal() {
+    const modal = document.getElementById('quiz-completion-modal');
+    const body = document.body;
+    body.classList.remove('modal-open')
+
+    currentQuestionIndex = 0;
+    userScore = 0;
+    document.getElementById('quiz-container').classList.remove('completed');
+
+    modal.classList.remove('completed');
+    modal.style.display = 'none';
+}
+
 function moveToNextQuestion() {
     currentQuestionIndex++;
 
@@ -218,17 +233,6 @@ function updateProgressBar() {
 
     const progress = (currentQuestionIndex / filteredQuestions.length) * 100;
     document.getElementById('progress-bar').style.width = `${progress}%`;
-}
-
-function closeModal() {
-    const modal = document.getElementById('quiz-completion-modal');
-    modal.style.display = 'none';
-
-    currentQuestionIndex = 0;
-    userScore = 0;
-
-    document.getElementById('quiz-container').classList.remove('completed');
-    modal.classList.remove('completed');
 }
 
 function tryAgain() {
@@ -288,8 +292,12 @@ function displayScoreChart() {
     // Create a container for the chart and add it to the grid
     const chartContainer = document.createElement('div');
     chartContainer.classList.add('chart-container');
-    gridContainer.appendChild(chartContainer);
+    // gridContainer.appendChild(chartContainer);
 
+    const canvas = document.createElement('canvas');
+    canvas.id = 'scoreChart';
+    chartContainer.appendChild(canvas);
+    gridContainer.appendChild(chartContainer);
     // Iterate through quiz questions to display feedback
     quizQuestions.forEach((question, index) => {
         const feedbackItem = document.createElement('div');
@@ -317,10 +325,8 @@ function displayScoreChart() {
 
             // Display (❌) or (✔) based on correctness
             if (question.userAnswer === option) {
-                // optionElement.innerHTML += question.userAnswer === question.correctAnswer ? ' (✔)' : ' (❌)';
                 optionElement.classList.add(question.userAnswer === question.correctAnswer ? 'correct-answer' : 'incorrect-answer');
             } else if (option === question.correctAnswer) {
-                // optionElement.innerHTML += ' (✔)';
                 optionElement.classList.add('correct-answer');
             }
 
@@ -335,13 +341,13 @@ function displayScoreChart() {
     modalContent.appendChild(gridContainer);
 
 
-    const canvas = document.getElementById('scoreChart');
+    // const canvas = document.getElementById('scoreChart');
     const ctx = canvas.getContext('2d');
     const correctPercentage = (userScore / quizQuestions.length) * 100;
     const incorrectPercentage = 100 - correctPercentage;
 
     new Chart(ctx, {
-        type: 'doughnut',
+        type: 'pie',
         data: {
             labels: ['Correct', 'Incorrect'],
             datasets: [{
@@ -359,7 +365,16 @@ function displayScoreChart() {
                 display: true,
                 position: 'bottom', // Position of the legend
             },
-            maintainAspectRatio: false, // Disable default aspect ratio
+            maintainAspectRatio: false,
+            tooltips: {
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        const dataset = data.datasets[0];
+                        const currentValue = dataset.data[tooltipItem.index];
+                        return currentValue.toFixed(2) + '%';
+                    },
+                },
+            },
         },
     });
 
