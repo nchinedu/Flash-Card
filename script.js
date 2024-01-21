@@ -1,3 +1,4 @@
+let quizQuestions;
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -11,48 +12,68 @@ function shuffleOptions(question) {
     }
 }
 
-const quizQuestions = [
-    {
-        category: 'Medical',
-        difficulty: 'Medium',
-        question: 'What is the name of the cell\'s powerhouse?',
-        options: ['Nucleus', 'Mitochondria', 'Endoplasmic Reticulum', 'Golgi Apparatus'],
-        correctAnswer: 'Mitochondria'
-    },
-    {
-        category: 'General Knowledge',
-        difficulty: 'Easy',
-        question: 'Which planet, known as the Red Planet, is the fourth planet from the Sun and has a reddish appearance?',
-        options: ['Earth', 'Mars', 'Venus', 'Jupiter'],
-        correctAnswer: 'Mars'
-    },
-    {
-        category: 'Psychological',
-        difficulty: 'Hard',
-        question: 'Who developed the stages of cognitive development theory, including sensorimotor, preoperational, concrete operational, and formal operational stages?',
-        options: ['Jean Piaget', 'Sigmund Freud', 'Erik Erikson', 'Abraham Maslow'],
-        correctAnswer: 'Jean Piaget'
-    },
-    {
-        category: 'Anime',
-        difficulty: 'Medium',
-        question: 'Who is the main protagonist in the anime "Naruto"?',
-        options: ['Sasuke Uchiha', 'Hinata Hyuga', 'Naruto Uzumaki', 'Sakura Haruno'],
-        correctAnswer: 'Naruto Uzumaki'
-    },
-    {
-        category: 'Web-Based/Internet Programming',
-        difficulty: 'Easy',
-        question: 'What does CSS stand for in the context of web development?',
-        options: ['Counter Strike: Source', 'Cascading Style Sheet', 'Computer Style Sheet', 'Creative Style System'],
-        correctAnswer: 'Cascading Style Sheet'
-    },
-];
+// const quizQuestions = [
+//     {
+//         category: 'Medical',
+//         difficulty: 'Medium',
+//         question: 'What is the name of the cell\'s powerhouse?',
+//         options: ['Nucleus', 'Mitochondria', 'Endoplasmic Reticulum', 'Golgi Apparatus'],
+//         correctAnswer: 'Mitochondria'
+//     },
+//     {
+//         category: 'General Knowledge',
+//         difficulty: 'Easy',
+//         question: 'Which planet, known as the Red Planet, is the fourth planet from the Sun and has a reddish appearance?',
+//         options: ['Earth', 'Mars', 'Venus', 'Jupiter'],
+//         correctAnswer: 'Mars'
+//     },
+//     {
+//         category: 'Psychological',
+//         difficulty: 'Hard',
+//         question: 'Who developed the stages of cognitive development theory, including sensorimotor, preoperational, concrete operational, and formal operational stages?',
+//         options: ['Jean Piaget', 'Sigmund Freud', 'Erik Erikson', 'Abraham Maslow'],
+//         correctAnswer: 'Jean Piaget'
+//     },
+//     {
+//         category: 'Anime',
+//         difficulty: 'Medium',
+//         question: 'Who is the main protagonist in the anime "Naruto"?',
+//         options: ['Sasuke Uchiha', 'Hinata Hyuga', 'Naruto Uzumaki', 'Sakura Haruno'],
+//         correctAnswer: 'Naruto Uzumaki'
+//     },
+//     {
+//         category: 'Web-Based/Internet Programming',
+//         difficulty: 'Easy',
+//         question: 'What does CSS stand for in the context of web development?',
+//         options: ['Counter Strike: Source', 'Cascading Style Sheet', 'Computer Style Sheet', 'Creative Style System'],
+//         correctAnswer: 'Cascading Style Sheet'
+//     },
+// ];
+async function fetchQuizQuestions() {
+    try {
+        const response = await fetch('http://localhost:3000/db/questions');
+        return await response.json();
+    } catch (e) {
+        console.error('Error fetching quiz questions', e);
+        throw e;
+    }
+}
+
+async function initializeQuiz() {
+    try {
+        quizQuestions = await fetchQuizQuestions();
+        console.log(quizQuestions)
+        shuffleArray(quizQuestions);
+        displayQuestion();
+    } catch (e) {
+        console.error('Error initializing quiz:', e);
+    }
+}
 
 let selectedCategory = 'all';
 let currentQuestionIndex = 0;
 let userScore = 0;
-shuffleArray(quizQuestions);
+// shuffleArray(quizQuestions);
 
 document.querySelector('.close').addEventListener('click', closeModal);
 
@@ -389,3 +410,4 @@ function displayScoreChart() {
 }
 
 displayQuestion();
+initializeQuiz();
