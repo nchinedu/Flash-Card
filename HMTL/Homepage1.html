@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="homepage.css">
+  <script src="homepage.js" defer></script>
+  <title>Your Webpage Title</title>
+</head>
+<body>
+
+  <div id="container">
+    <h1 style="color: white;" id="title">Flashcard/Quiz App</h1>
+    <h2 style="font-size: xx-large;color: white;">Start Your Learning Today</h2>
+    <select id="dropdown" style="margin-bottom: 10px;">
+      <option value="option1">Option 1</option>
+      <option value="option2">Option 2</option>
+      <option value="option3">Option 3</option>
+    </select>
+
+    <button id="clickMeButton" onmouseover="buttonHover()" onmouseout="buttonHoverOut()" onclick="navigateToHomepage()">Click me</button>
+
+    <h1 style="color: white;">Meet Your Creators</h1>
+
+    <div id="author-profiles">
+      <div class="profile-box" onclick="enlargeProfile(this)">
+        <h2>N.CHINEDU</h2>
+        <p>Author 1 Info Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      </div>
+
+      <div class="profile-box" onclick="enlargeProfile(this)">
+        <h2>BOT PETER </h2>
+        <p>Author 2 Info Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      </div>
+
+      <div class="profile-box bottom-left" onclick="enlargeProfile(this)">
+        <h2>Author 3</h2>
+        <p>Author 3 Info Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      </div>
+
+      <div class="profile-box bottom-right" onclick="enlargeProfile(this)">
+        <h2>Author 4</h2>
+        <p>Author 4 Info Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
