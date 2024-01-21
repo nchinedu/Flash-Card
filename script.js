@@ -212,6 +212,7 @@ function closeModal() {
 
     modal.classList.remove('completed');
     modal.style.display = 'none';
+    window.location.href = './index.html';
 }
 
 function moveToNextQuestion() {
@@ -240,6 +241,7 @@ function tryAgain() {
     resetQuiz();
     shuffleArray(quizQuestions);
     displayQuestion();
+    location.reload();
 }
 
 function resetQuiz() {
@@ -247,7 +249,7 @@ function resetQuiz() {
     userScore = 0;
 
     // Remove highlighting and progress bar
-    document.querySelectorAll('.options button').forEach(button => {
+    document.querySelectorAll('#options-section button').forEach(button => {
         button.classList.remove('correct', 'incorrect');
     });
     document.getElementById('progress-bar').style.width = '0%';
@@ -264,7 +266,9 @@ function resetQuiz() {
     // Remove completion class
     document.getElementById('quiz-container').classList.remove('completed');
     document.getElementById('quiz-completion-modal').classList.remove('completed');
-    shuffleArray(quizQuestions);
+    quizQuestions.forEach(question => {
+        question.userAnswerIndex = -1;
+    });
 }
 
 function exitQuiz() {

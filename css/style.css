@@ -23,16 +23,25 @@ body {
     position: relative;
     font-size: 18px;
     animation: fadeIn 0.5s forwards;
+    @media only screen and (max-width: 600px) {
+        padding: 10px;
+    }
 }
 
 h2 {
-    font-size: 1.5em; /* Adjust the font size for question headings */
+    font-size: 1.5em;
+    @media only screen and (max-width: 600px) {
+        font-size: 1.2em;
+    }
 }
 
 #question-section {
     opacity: 0;
     animation: fadeIn 0.5s forwards;
     margin-bottom: 20px;
+    @media only screen and (max-width: 600px) {
+        font-size: 1.2em;
+    }
 }
 
 #options-section {
@@ -59,6 +68,9 @@ h2 {
     color: var(--text-color);
     font-size: 16px;
     transition: background-color 0.3s ease;
+    @media only screen and (max-width: 600px) {
+        font-size: 1.2em;
+    }
 }
 
 #next-button,
@@ -88,6 +100,9 @@ h2 {
     margin-top: 10px;
     position: relative; /* Set the position to relative */
     background-color: var(--background-color);
+    @media only screen and (max-width: 600px) {
+        height: 6px;
+    }
 }
 
 #progress-bar {
@@ -125,6 +140,10 @@ h2 {
     border: 1px solid var(--primary-color);
     font-size: 16px;
     animation: fadeIn 0.5s forwards;
+    @media only screen and (max-width: 600px) {
+        margin: 10% auto;
+        padding: 10px;
+    }
 }
 
 
@@ -229,14 +248,6 @@ footer {
     --text-color: #333333; /* Dark Gray */
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
 
 /* Add these styles for better visual appeal */
 /* Add these styles for the grid layout and indicators */
@@ -330,5 +341,39 @@ body.modal-open {
     background-color: #fff;
 }
 
+#user-score {
+    cursor: pointer;
+    color: #3498db; /* Blue color, you can adjust the color as needed */
+    text-decoration: none;
+    font-size: 18px; /* Adjust the font size */
+    font-weight: bold; /* Make it bold */
+}
+
+#user-score:hover {
+    color: #2980b9; /* Darker blue color on hover, adjust as needed */
+    text-decoration: underline; /* Underline on hover */
+}
 
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    #quiz-container {
+        padding: 10px;
+    }
+
+    #options-section button {
+        font-size: 14px;
+    }
+
+    #progress-bar-container {
+        height: 6px;
+    }
+}
