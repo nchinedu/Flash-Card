@@ -7,10 +7,10 @@ function navigateToHomepage() {
             loadPage("homepage1.html", "homepage1.css")
             break;
         case "flashcard":
-            loadPage("homepage2.html", "homepage2.css")
+            loadPage("../FlashcardPage/flashcard.editor.html", "../FlashcardPage/flashcard.editor.css")
             break;
         case "quiz":
-            loadPage("../pages/index.html", "../css/style.css")
+            loadPage("../pages/quiz.html", "../css/style.css")
             break;
         default:
         // Handle the default case or add additional cases as needed
