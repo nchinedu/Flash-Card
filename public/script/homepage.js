@@ -4,13 +4,13 @@ function navigateToHomepage() {
 
     switch (selectedOption) {
         case "create":
-            loadPage("homepage1.html", "homepage1.css")
+            loadPage("public/FlashcardPage/flashcard.editor.html", "homepage1.css")
             break;
         case "flashcard":
-            loadPage("../FlashcardPage/flashcard.editor.html", "../FlashcardPage/flashcard.editor.css")
+            loadPage("public/FlashcardPage/flashcard.html", "../FlashcardPage/flashcard.editor.css")
             break;
         case "quiz":
-            loadPage("../pages/quiz.html", "../css/style.css")
+            loadPage("public/pages/quiz.html", "../css/style.css")
             break;
         default:
         // Handle the default case or add additional cases as needed
