@@ -200,7 +200,7 @@ function displayQuestion() {
 
         modal.classList.remove('completed');
         modal.style.display = 'none';
-        window.location.href = '../pages/Homepage1.html';
+        window.location.href = '../../index.html';
     }
 
     function moveToNextQuestion() {

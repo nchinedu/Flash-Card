@@ -10,7 +10,7 @@ function navigateToHomepage() {
             loadPage("homepage2.html", "homepage2.css")
             break;
         case "quiz":
-            loadPage("../pages/index.html", "../css/style.css")
+            loadPage("../pages/quiz.html", "../css/style.css")
             break;
         default:
         // Handle the default case or add additional cases as needed
