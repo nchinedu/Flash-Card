@@ -3,10 +3,10 @@ function navigateToHomepage() {
     const selectedOption = dropdown.options[dropdown.selectedIndex].value;
 
     switch (selectedOption) {
-        case "option1":
+        case "create":
             loadPage("homepage1.html", "homepage1.css")
             break;
-        case "option2":
+        case "flashcard":
             loadPage("homepage2.html", "homepage2.css")
             break;
         case "quiz":
