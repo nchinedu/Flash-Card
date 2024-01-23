@@ -15,7 +15,7 @@ function shuffleOptions(question) {
 
 async function fetchQuizQuestions() {
     try {
-        const response = await fetch('http://localhost:3000/db/questions');
+        const response = await fetch('https://flashcard-backend-beryl.vercel.app/db/first-cluster/questions');
         return await response.json();
     } catch (e) {
         console.error('Error fetching quiz questions', e);

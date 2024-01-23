@@ -3,12 +3,7 @@ function navigateToHomepage() {
     const selectedOption = dropdown.options[dropdown.selectedIndex].value;
 
     switch (selectedOption) {
-        case "create":
-            loadPage("public/FlashcardPage/flashcard.editor.html", "homepage1.css")
-            break;
-        case "flashcard":
-            loadPage("public/FlashcardPage/flashcard.html", "../FlashcardPage/flashcard.editor.css")
-            break;
+
         case "quiz":
             loadPage("public/pages/quiz.html", "../css/style.css")
             break;
