@@ -1,17 +1,26 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require("cors")
+const cors = require("cors");
+
 const app = express();
 const port = 3000;
 
-mongoose.connect('mongodb+srv://nduluechinedu:1234@testcluster.9slnzsa.mongodb.net/FlashCard', {
-    useNewUrlParser: true,
+mongoose.connect('mongodb://localhost:27017', {
     useUnifiedTopology: true,
+    useNewUrlParser: true,
 });
 
 mongoose.connection.on("connected", () => {
-    console.log("Database connected")
-})
+    console.log("Database connected");
+});
+
+mongoose.connection.on("error", (error) => {
+    console.error('Error connecting to the database:', error);
+});
+
+mongoose.connection.on("disconnected", () => {
+    console.log("Database disconnected");
+});
 
 const quizQuestionSchema = new mongoose.Schema({
     category: String,
@@ -19,24 +28,28 @@ const quizQuestionSchema = new mongoose.Schema({
     question: String,
     options: [String],
     correctAnswer: String,
-})
+});
+
 const QuizQuestion = mongoose.model('questions', quizQuestionSchema);
 
 app.use(cors());
 app.use((_, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
-})
+});
+
 app.get('/db/questions', async (req, res) => {
     try {
         const questions = await QuizQuestion.find();
         res.json(questions);
     } catch (error) {
         console.error('Error fetching questions:', error);
-        res.status(500).json({error: 'Internal Server Error'})
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
-})
+});
