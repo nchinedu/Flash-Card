@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const questionInput = document.getElementById('question-input');
     const answerInput = document.getElementById('answer-input');
     const answer = document.getElementById('answer');
+    const goBackBtn = document.getElementById('go-back-btn');
 
     let flashcards = [
         { question: 'What is HTML?', answer: 'Hypertext Markup Language' },
@@ -39,6 +40,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         questionInput.value = '';
         answerInput.value = '';
+    });
+
+    goBackBtn.addEventListener('click', function () {
+        window.history.back();
     });
 
     function updateFlashcard(currentCard) {

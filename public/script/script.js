@@ -371,5 +371,6 @@ function displayScoreChart() {
     }
 }
 
+
 displayQuestion();
 initializeQuiz();
