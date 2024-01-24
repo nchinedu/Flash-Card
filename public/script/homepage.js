@@ -7,6 +7,9 @@ function navigateToHomepage() {
         case "quiz":
             loadPage("public/pages/quiz.html", "../css/style.css")
             break;
+        case "Flashcard":
+                loadPage("flash card/flashcard.html", "../css/style.css")
+                break;
         default:
         // Handle the default case or add additional cases as needed
     }
