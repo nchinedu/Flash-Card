@@ -1,109 +1,105 @@
+const flashcards = [
+  {
+    question: "Flashcard Question 1",
+    answer: "Answer 1"
+  },
+  {
+    question: "Flashcard Question 2",
+    answer: "Answer 2"
+  },
+  
+];
+
+
+const width = window.screen.width;
+const height = window.screen.height;
+const body = document.querySelector('body');
+body.style.backgroundImage = `url(https://source.unsplash.com/random/${width}x${height}?study`;
+
+
+// Function to update flashcard content
+function updateFlashcard(index) {
+  const flashcardFront = document.querySelector('.flashcard-front p');
+  const flashcardBack = document.querySelector('.flashcard-back p');
+
+  flashcardFront.textContent = flashcards[index].question;
+  flashcardBack.textContent = flashcards[index].answer;
+}
+
 let currentCardIndex = 0;
-// Load flashcards when the page loads
-window.onload = loadFlashcardsFromServer;
 
-function moveNext() {
-    const cardList = document.getElementById('cardList');
-    if (currentCardIndex < cardList.children.length - 1) {
-        currentCardIndex++;
-        updateCardVisibility();
-    }
+// Function to show the next flashcard
+function nextCard() {
+  currentCardIndex = (currentCardIndex + 1) % flashcards.length;
+  updateFlashcard(currentCardIndex);
 }
 
-function movePrevious() {
-    if (currentCardIndex > 0) {
-        currentCardIndex--;
-        updateCardVisibility();
-    }
+// Function to show the previous flashcard
+function prevCard() {
+  currentCardIndex = (currentCardIndex - 1 + flashcards.length) % flashcards.length;
+  updateFlashcard(currentCardIndex);
 }
 
-function updateCardVisibility() {
-    const cards = document.querySelectorAll('.flashcard');
-
-    cards.forEach((card, index) => {
-        if (index === currentCardIndex) {
-            card.classList.add('visible');
-        } else {
-            card.classList.remove('visible');
-        }
-    });
+// Function to open the add card modal
+function openAddCardModal() {
+  const addCardModal = document.getElementById('addCardModal');
+  addCardModal.style.display = addCardModal.style.display === 'none' ? 'block' : 'none';
+  
 }
 
-async function loadFlashcardsFromServer() {
+function closeAddCardModal() {
+  const addCardModal = document.getElementById('addCardModal');
+  addCardModal.style.display = 'none';
+}
+
+async function addCard() {
+  const question = document.getElementById('questionInput').value;
+  const answer = document.getElementById('answerInput').value;
+
+  if (question && answer) {
     try {
-        const response = await fetch('/api/flashcards');
-        if (!response.ok) {
-            throw new Error(`Error fetching flashcards: ${response.statusText}`);
-        }
+      // Create an object with question and answer properties
+      const newFlashcard = { question, answer };
 
-        const flashcards = await response.json();
-        console.log('Flashcards from server:', flashcards);
-        const cardList = document.getElementById('cardList');
+      // Save the new flashcard to the MongoDB database
+      const savedFlashcard = await fetch('/api/flashcards', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newFlashcard),
+      }).then((response) => response.json());
 
-        // Clear existing cards
-        cardList.innerHTML = '';
+      // Update the local flashcards array
+      flashcards.push(newFlashcard);
 
-        flashcards.forEach(card => {
-            const cardElement = createCard(card.front, card.back);
-            cardList.appendChild(cardElement);
-        });
-
-        // Ensure the correct card is visible
-        updateCardVisibility();
+      closeAddCardModal();
+      updateFlashcard(currentCardIndex);
     } catch (error) {
-        console.error(error);
+      console.error('Error saving flashcard:', error);
     }
-}
-
-function createCard(frontContent, backContent) {
-    const card = document.createElement('div');
-    card.className = 'flashcard';
-
-    const cardInner = document.createElement('div');
-    cardInner.className = 'card-inner';
-
-    const front = document.createElement('div');
-    front.className = 'front';
-    front.innerHTML = `<p>${frontContent}</p>`;
-
-    const back = document.createElement('div');
-    back.className = 'back';
-    back.innerHTML = `<p>${backContent}</p>`;
-
-    cardInner.appendChild(front);
-    cardInner.appendChild(back);
-
-    card.appendChild(cardInner);
-
-    card.addEventListener('click', function () {
-        this.classList.toggle('flipped');
-    });
-
-    return card;
+  }
 }
 
 
+async function fetchFlashcards() {
+  try {
+    // Fetch flashcards from the MongoDB database
+    const response = await fetch('/api/flashcards');
+    const fetchedFlashcards = await response.json();
+    console.log('Response:', response); // Log the entire response
+    console.log('Fetched Flashcards:', fetchedFlashcards);
+    // Update the local flashcards array
+    flashcards.splice(0, flashcards.length, ...fetchedFlashcards);
 
-
-function toggleDropdown(dropdownId) {
-    const dropdown = document.getElementById(dropdownId);
-
-    // Toggle dropdown visibility
-    dropdown.style.display = (dropdown.style.display === 'none' || dropdown.style.display === '') ? 'block' : 'none';
-
-    // Get the dropdown and window dimensions
-    const dropdownRect = dropdown.getBoundingClientRect();
-    const windowWidth = window.innerWidth;
-
-    // Check if the dropdown goes beyond the right side of the screen
-    if (dropdownRect.right > windowWidth) {
-        // Calculate the adjusted left position to keep the dropdown within the screen
-        const adjustedLeft = windowWidth - dropdownRect.width;
-
-        // Ensure the adjusted left position is not negative
-        dropdown.style.left = `${Math.max(adjustedLeft, 0)}px`;
-    } else {
-        // Reset left position if the dropdown is within the screen
-        dropdown.style.left = '';
-    }
+    // Update the displayed flashcard
+    updateFlashcard(currentCardIndex);
+    console.log('Fetched Flashcards:', fetchedFlashcards);
+  } catch (error) {
+    console.error('Error fetching flashcards:', error);
+  }
 }
+
+// Fetch flashcards when the page is loaded
+window.addEventListener('load', fetchFlashcards);
+

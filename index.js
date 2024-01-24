@@ -1,23 +1,37 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const Flashcard = require('./public/models/flashcard'); // Adjust the path here
-const path = require('path');
+const cors = require('cors');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
-mongoose.connect('mongodb+srv://nduluechinedu:1234@testcluster.9slnzsa.mongodb.net/?retryWrites=true&w=majority', 
-{tls: true,               // Enable TLS
-tlsAllowInvalidCertificates: true,
-ssl: true});
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.static('public'));
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json()); // Middleware to parse JSON request body
+// MongoDB Connection
+const mongoURI =
+  'mongodb+srv://nduluechinedu:1234@testcluster.9slnzsa.mongodb.net/?retryWrites=true&w=majority';
 
-// Updated /api/flashcards endpoint to fetch and serve flashcards
+mongoose
+  .connect(mongoURI, { tls: true,               // Enable TLS
+  tlsAllowInvalidCertificates: true,
+  ssl: true })
+  .then(() => console.log('MongoDB connected'))
+  .catch((err) => console.error('MongoDB connection error:', err));
+
+// Flashcard Schema
+const flashcardSchema = new mongoose.Schema({
+  question: String,
+  answer: String,
+});
+
+const Flashcard = mongoose.model('Flashcard', flashcardSchema);
+
+// Get all flashcards
 app.get('/api/flashcards', async (req, res) => {
   try {
-    // Fetch flashcards from MongoDB
     const flashcards = await Flashcard.find();
     res.json(flashcards);
   } catch (error) {
@@ -26,39 +40,18 @@ app.get('/api/flashcards', async (req, res) => {
   }
 });
 
-// Updated endpoint to handle creating a new card
+// Add a new flashcard
 app.post('/api/flashcards', async (req, res) => {
   try {
-    // Assuming the new card data is sent in the request body
     const newFlashcard = await Flashcard.create(req.body);
-
-    // Respond with the newly created flashcard
     res.status(201).json(newFlashcard);
   } catch (error) {
-    console.error('Error creating flashcard:', error);
+    console.error('Error adding flashcard:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
-// Updated endpoint to handle viewing cards created by a specific user
-app.get('/api/user/:userId/flashcards', async (req, res) => {
-  const userId = req.params.userId;
-
-  try {
-    // Assuming each flashcard has a 'userId' field
-    const userFlashcards = await Flashcard.find({ userId });
-    res.json(userFlashcards);
-  } catch (error) {
-    console.error('Error fetching user flashcards:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
-

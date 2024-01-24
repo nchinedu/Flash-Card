@@ -1,54 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flashcard Web App - Flashcard Display</title>
-    <link rel="stylesheet" href="flashcard.css">
-    <script src="flashcard.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="flashcard.css">
+  <title>Flashcards</title>
 </head>
-
 <body>
 
-    <!-- Navbar -->
-    <div class="navbar">
-        <div class="navbar-left">
-            <h1 class="navbar-title">Flash Quiz</h1>
-            <a href="../index.html" class = "navbar-link">Home</a>
-        </div>
-        <input type="text" class="navbar-search" placeholder="Search desks">
-        <div class="navbar-notifications" onclick="toggleDropdown('notification-dropdown')">
-            <span>🔔</span>
-            <!-- Notification Dropdown -->
-            <div class="notification-dropdown" id="notification-dropdown">
-                <div class="notification-dropdown-content">
-                    <p>No notifications</p>
-                </div>
-            </div>
-        </div>
-        <div class="navbar-profile" onclick="toggleDropdown('profile-dropdown')">
-            <span>👤</span>
-            <!-- Profile Dropdown -->
-            <div class="profile-dropdown" id="profile-dropdown">
-                <div class="profile-dropdown-content">
-                    <p><a href="#">Login</a></p>
-                    <p><a href="#">Profile Dashboard</a></p>
-                </div>
-            </div>
+  <!-- Navbar -->
+  <nav>
+    <div class="navbar-container">
+        <span id = "title"><a href="#">Flashcards</a></span>
+
+        <div class="navbar-stuff">
+        <button id="addCardButton" onclick="openAddCardModal()">+</button>
+        
         </div>
     </div>
+  </nav>
 
-    <!-- Flashcard Container -->
-    <div id="app">
-        <div id="cardSlider">
-            <div id="cardList" class="card-list"></div>
+  <!-- Main Content -->
+  <main>
+    <button class="card-button" onclick="prevCard()">&#9665;</button>
+    <div id="flashcardContainer" class="flashcard-container">
+
+    <!-- Flashcard -->
+    
+        <div class="flashcard-content">
+            <div class="flashcard-front">
+                <p>Flashcard Question</p>
+            </div>
+            <div class="flashcard-back">
+                <p>Answer</p>
+            </div>
         </div>
-        <!-- Navigation Buttons -->
-        <button onclick="movePrevious()">Previous</button>
-        <button onclick="moveNext()">Next</button>
+   
+
+    </div>
+    <button class="card-button" onclick="nextCard()">&#9655;</button>
+  </main>
+  <!-- Add Card Modal -->
+  <div id="addCardModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeModal" onclick="closeAddCardModal()">&times;</span>
+      <h2>Add Flashcard</h2>
+      <input type="text" id="questionInput" placeholder="Question">
+      <input type="text" id="answerInput" placeholder="Answer">
+      <button id="submitCardButton" onclick="addCard()">Submit</button>
+    </div>
     </div>
 
+  <script src="flashcard.js"></script>
 </body>
-
 </html>
+
+
+
+
+    

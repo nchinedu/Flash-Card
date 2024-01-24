@@ -1,162 +1,158 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #1D1F20;
+    display:block;
     margin: 0;
-    padding: 0;
-    color: white;
-    width: 100%;
-}
-
-button {
-    background-color: #2C3032;
-    border-color: #665F54;
-    border-bottom-color: #11100E;
-}
-
-/* Flashcard styles */
-#app {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background-color:  #080724;
+    color: #BEC9D7;
     height: 100vh;
-    flex-direction: column;
-}
-
-#cardSlider {
+    width:100%;
     overflow: hidden;
-    width: 210px;
-    height: 150px;
-}
+    
+}  
 
-.card-list {
-    padding-left: 5px;
+.navbar-container {
     display: flex;
-    transition: transform 0.5s ease-in-out;
-}
-
-#cardList {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.flashcard {
-    width: 200px;
-    height: 120px;
-    perspective: 1000px;
-    cursor: pointer;
-    margin-right: 10px;
-    flex-shrink: 0;
-    border-radius: 8px;
-    overflow: visible;
-}
-
-.flashcard.visible {
-    display: block;
-}
-
-.card-inner {
+    background-color: #03254c;
+    margin-bottom: 1em;
     width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    transition: transform 0.5s;
-}
-
-.flashcard.flipped .card-inner {
-    transform: rotateY(180deg);
-}
-
-.front,
-.back {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    display: flex;
     justify-content: center;
     align-items: center;
-    backface-visibility: hidden;
-    border: 1px solid #3E4446;
-    border-radius: 8px;
-    background-color: #131516;
+    height: 7vh
 }
 
-.back {
+.navbar-container > #title > a {
+    color: #BEC9D7;
+    text-decoration: none;
+    
+    font-size: 1.5em;
+    font-weight: bold;
+}
+.navbar-stuff{
+    display: flex;
+}
+
+.navbar-stuff > button {
+    color: #BEC9D7;
+    text-decoration: none;
+    margin: 0 1em;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#title {
+    font-size: 1.5em;
+    font-weight: bold;
+    
+}
+
+#addCardModal {
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 0;
+}
+
+
+#addCardModal .modal-content {
+    background-color: #03254c;
+    margin-top: 10px;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    border-radius: 30px;
+}
+
+#addCardModal .modal-content .close {
+    cursor: pointer;
+}
+
+#addCardModal .modal-content input {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    background-color: #252D45;
+    border: none;
+    border-radius: 4px;
+    color: #BEC9D7;
+}
+
+#addCardModal .modal-content button {
+    background-color: #252D45;
+    color: #BEC9D7;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.flashcard-container {
+    height: 80vh;
+    width: 50vh;
+}
+
+.flashcard-container:hover > .flashcard-content {
+    cursor: pointer;
     transform: rotateY(180deg);
 }
 
-.flashcard p {
-    margin: 0;
+.flashcard-content{
+    height: 100%;
+    width: 100%;
+    position: relative;
+    transition: transform 0.7s;
+    transform-style: preserve-3d;
 }
 
-/* Navbar styles */
-.navbar {
-    background-color: #175984;
-    color: #181A1B;
-    padding: 10px;
+
+.flashcard-back,
+ .flashcard-front {
+    margin: 0%;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    box-shadow: 0 0 8px 4px rgba(50,50,50,0.1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    backface-visibility: hidden;
+
+}
+
+.flashcard-front {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #252D45;
+    border-radius: 50px;
+    
 }
-
-.navbar-title {
-    font-size: 1.5em;
-    margin: 10;
-    color: antiquewhite;
-}
-
-.navbar-left {
+.flashcard-back {
+    transform: rotateY(180deg);
     display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    background-color: #252D45;
+    border-radius: 50px;
 }
 
-.navbar-link {
-    padding-left: 20px;
-    font-size: small;
-    text-decoration: none;
-    color: antiquewhite;
-    cursor: pointer;
+main {
+    display: flex;
+    position:relative;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
-.navbar-search {
-    border: none;
-    border-radius: 20px;
-    padding: 8px 15px;
-    margin: 0 10px;
-    width: 500px;
+.card-button {
+    display: flex;
     text-align: center;
+    justify-content: center;
+    margin: 10px;
+    height: 20vh;
+    width: 10vh;
+    background-color: #03254c42;
+    line-height: 19vh;
 }
 
-.navbar-notifications,
-.navbar-profile {
-    cursor: pointer;
-    margin-left: 10px;
-    margin-right: 30px;
-}
-
-/* Notification dropdown */
-.notification-dropdown {
-    display: none;
-    position: absolute;
-    background-color: #3B3B3B;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-}
-
-.notification-dropdown-content {
-    padding: 10px;
-}
-
-/* Profile dropdown */
-.profile-dropdown {
-    display: none;
-    position: absolute;
-    background-color: #3B3B3B;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-}
-
-.profile-dropdown-content {
-    padding: 10px;
-}
