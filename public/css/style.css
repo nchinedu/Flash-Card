@@ -1,0 +1,341 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    transition: background-color 0.3s ease;
+}
+
+#quiz-container {
+    background-color: var(--background-color);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 600px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    font-size: 18px;
+    animation: fadeIn 0.5s forwards;
+    @media only screen and (max-width: 600px) {
+        padding: 10px;
+    }
+}
+
+h2 {
+    font-size: 1.5em;
+    @media only screen and (max-width: 600px) {
+        font-size: 1.2em;
+    }
+}
+
+#question-section {
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+    margin-bottom: 20px;
+    @media only screen and (max-width: 600px) {
+        font-size: 1.2em;
+    }
+}
+
+#options-section {
+    margin-bottom: 20px;
+}
+
+#options-section button.correct,
+#options-section button.incorrect {
+    animation: fadeIn 0.5s forwards;
+}
+
+#options-section button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-style: oblique;
+    font-weight: 900;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    @media only screen and (max-width: 600px) {
+        font-size: 1.2em;
+    }
+}
+
+#next-button,
+#previous-button,
+#submit-button {
+    margin-right: 10px;
+}
+
+#options-section button.correct {
+    background-color: var(--success-color);
+    color: var(--text-color);
+}
+
+#options-section button.incorrect {
+    background-color: var(--error-color);
+    color: var(--text-color);
+}
+
+#feedback-section {
+    margin-top: 10px;
+    color: #333;
+}
+
+#progress-bar-container {
+    width: 100%;
+    height: 4px;
+    margin-top: 10px;
+    position: relative;
+    background-color: var(--background-color);
+    @media only screen and (max-width: 600px) {
+        height: 6px;
+    }
+}
+
+#progress-bar {
+    height: 100%;
+    width: 0;
+    border-radius: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: width 0.5s ease-out;
+    background-color: var(--success-color);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 80%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--primary-color);
+    font-size: 16px;
+    animation: fadeIn 0.5s forwards;
+    @media only screen and (max-width: 600px) {
+        margin: 10% auto;
+        padding: 10px;
+    }
+}
+
+.close {
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--primary-color);
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#quiz-container.completed {
+    background-color: #f0f0f0;
+}
+
+#progress-bar-container.completed {
+    display: none;
+}
+
+footer {
+    position: fixed;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    color: var(--text-color);
+    font-size: 14px;
+}
+
+#feedback-section {
+    margin-top: 10px;
+    color: #333;
+}
+
+.question-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.question-grid button {
+    margin: 5px;
+    padding: 5px 10px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#error-message {
+    color: var(--error-color);
+    font-size: 14px;
+}
+
+.question-grid button:hover {
+    background-color: #45a049;
+}
+
+:root {
+    --primary-color: #3498db;
+    --success-color: #2ecc71;
+    --error-color: #e74c3c;
+    --background-color: #ffffff;
+    --text-color: #333333;
+}
+
+.feedback-container {
+    margin-top: 20px;
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.feedback-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.options-container {
+    list-style-type: none;
+    padding: 0;
+}
+
+.option {
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+}
+
+.option-text {
+    margin-right: 10px;
+}
+
+.option p {
+    margin: 0;
+}
+
+.option::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 10px;
+    font-size: 18px;
+}
+
+.option.correct-answer::after {
+    content: '✔';
+    color: #4caf50;
+}
+
+.option.incorrect-answer::after {
+    content: '❌';
+    color: #f44336;
+}
+
+.option:hover {
+    background-color: #ddd;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.chart-container {
+    max-width: 100%;
+    flex: 1;
+    overflow: hidden;
+    box-sizing: border-box;
+    position: relative;
+}
+
+#scoreChart {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+body.modal-open {
+    background-color: #fff;
+}
+
+#user-score {
+    cursor: pointer;
+    color: #3498db;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#user-score:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    #quiz-container {
+        padding: 10px;
+    }
+
+    #options-section button {
+        font-size: 14px;
+    }
+
+    #progress-bar-container {
+        height: 6px;
+    }
+
+    .question-grid button {
+        padding: 5px 8px;
+    }
+}

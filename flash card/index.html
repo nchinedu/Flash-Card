@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Your Flashcard/Quiz App for interactive learning.">
+    <link rel="icon" href="public/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="public/css/homepage.css">
+    <title>Your Webpage Title</title>
+</head>
+<body>
+
+<div id="container">
+    <h1 style="color: white;" id="title">Flashcard/Quiz App</h1>
+    <h2 style="font-size: xx-large;color: white;">Start Your Learning Today</h2>
+    <label for="dropdown"></label><select id="dropdown" style="margin-bottom: 10px;">
+    <option value="quiz">Quiz</option>
+    <option value="Flashcard">Flashcard</option>
+</select>
+
+    <button id="clickMeButton" onmouseover="buttonHover()" onmouseout="buttonHoverOut()" onclick="navigateToHomepage()">
+        Click me
+    </button>
+
+    <h1 style="color: white;">Meet Your Creators</h1>
+
+    <div id="author-profiles">
+        <div class="profile-box" onclick="enlargeProfile(this)">
+            <h2>N. CHINEDU</h2>
+            <p>Passionate about programming and computer science, I leverage data to drive decisions. As a data
+                analyst, I transform complex datasets into clear insights.</p>
+        </div>
+
+        <div class="profile-box" onclick="enlargeProfile(this)">
+            <h2>BOT PETER </h2>
+            <p>AI am a 9-year-old computer science enthusiast with the matriculation number 21CG029838. Actively
+                contributing to website development, I've explored HTML, CSS, and basic JavaScript. Accomplishments
+                include completing coding challenges, participating in workshops, and showcasing creativity through
+                digital projects. Aspiring to enhance programming skills, contribute to open-source projects, and
+                inspire others in the field of technology.</p>
+        </div>
+
+        <div class="profile-box bottom-left" onclick="enlargeProfile(this)">
+            <h2>OGO ILORI</h2>
+            <p>A game developer and aspiring AI engineer. I create fun, sometimes educational games</p>
+        </div>
+
+
+    </div>
+</div>
+<script src="public/script/homepage.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../images/quizzes.png" type="images/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Flashcard Quiz</title>
+</head>
+<body>
+
+<div id="quiz-container">
+
+    <div id="progress-bar-container">
+        <div id="progress-bar"></div>
+    </div>
+    <div id="question-section">
+        <h2 id="question-text"></h2>
+    </div>
+
+    <div id="options-section"></div>
+</div>
+
+<div id="quiz-completion-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Quiz Completed!</h2>
+        <p>Your Score: <span id="user-score">0</span></p>
+    </div>
+
+</div>
+
+<div id="error-message"></div>
+<footer>
+    <p>&copy; 2024 Flashcard Group13 Quiz App</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="../script/script.js"></script>
+</body>
+</html>
