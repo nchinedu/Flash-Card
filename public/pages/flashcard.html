@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../images/flash.jpeg" type="images/x-icon">
+    <link rel="stylesheet" href="../css/flashcard.css">
+    <title>Flashcards</title>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+    <div class="navbar-container">
+        <span id="title"><a href="#">Flashcards</a></span>
+
+        <div class="navbar-stuff">
+            <button id="addCardButton" onclick="openAddCardModal()">+</button>
+
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<main>
+    <button class="card-button" onclick="prevCard()">&#9665;</button>
+    <div id="flashcardContainer" class="flashcard-container">
+
+        <!-- Flashcard -->
+
+        <div class="flashcard-content">
+            <div class="flashcard-front">
+                <p>Flashcard Question</p>
+            </div>
+            <div class="flashcard-back">
+                <p>Answer</p>
+            </div>
+        </div>
+
+
+    </div>
+    <button class="card-button" onclick="nextCard()">&#9655;</button>
+</main>
+<!-- Add Card Modal -->
+<div id="addCardModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeModal" onclick="closeAddCardModal()">&times;</span>
+        <h2>Add Flashcard</h2>
+        <label for="questionInput"><input type="text" id="questionInput" placeholder="Question"></label>
+        <label for="answerInput"><input type="text" id="answerInput" placeholder="Answer"></label>
+        <button id="submitCardButton" onclick="addCard()">Submit</button>
+    </div>
+</div>
+
+<script src="../script/flashcard.js"></script>
+</body>
+</html>
+
+
+
+
+    
