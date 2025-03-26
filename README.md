@@ -17,6 +17,6 @@ A dynamic and engaging quiz application built using HTML, CSS, and JavaScript. T
 Contributions are welcome! Feel free to enhance the app, add new features, or suggest improvements. Please open an issue to discuss major changes before submitting a pull request.
 
 **License:**
-This project is licensed under the [MIT License](link-to-license).
+This project is licensed under the [ISC License](link-to-license).
 
 Enjoy learning and quiz-solving with the Flashcard Quiz App!

@@ -1,0 +1,158 @@
+body {
+    display:block;
+    margin: 0;
+    background-color:  #080724;
+    color: #BEC9D7;
+    height: 100vh;
+    width:100%;
+    overflow: hidden;
+    
+}  
+
+.navbar-container {
+    display: flex;
+    background-color: #03254c;
+    margin-bottom: 1em;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    height: 7vh
+}
+
+.navbar-container > #title > a {
+    color: #BEC9D7;
+    text-decoration: none;
+    
+    font-size: 1.5em;
+    font-weight: bold;
+}
+.navbar-stuff{
+    display: flex;
+}
+
+.navbar-stuff > button {
+    color: #BEC9D7;
+    text-decoration: none;
+    margin: 0 1em;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#title {
+    font-size: 1.5em;
+    font-weight: bold;
+    
+}
+
+#addCardModal {
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 0;
+}
+
+
+#addCardModal .modal-content {
+    background-color: #03254c;
+    margin-top: 10px;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    border-radius: 30px;
+}
+
+#addCardModal .modal-content .close {
+    cursor: pointer;
+}
+
+#addCardModal .modal-content input {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    background-color: #252D45;
+    border: none;
+    border-radius: 4px;
+    color: #BEC9D7;
+}
+
+#addCardModal .modal-content button {
+    background-color: #252D45;
+    color: #BEC9D7;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.flashcard-container {
+    height: 80vh;
+    width: 50vh;
+}
+
+.flashcard-container:hover > .flashcard-content {
+    cursor: pointer;
+    transform: rotateY(180deg);
+}
+
+.flashcard-content{
+    height: 100%;
+    width: 100%;
+    position: relative;
+    transition: transform 0.7s;
+    transform-style: preserve-3d;
+}
+
+
+.flashcard-back,
+ .flashcard-front {
+    margin: 0%;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    box-shadow: 0 0 8px 4px rgba(50,50,50,0.1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    backface-visibility: hidden;
+
+}
+
+.flashcard-front {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #252D45;
+    border-radius: 50px;
+    
+}
+.flashcard-back {
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #252D45;
+    border-radius: 50px;
+}
+
+main {
+    display: flex;
+    position:relative;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.card-button {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    margin: 10px;
+    height: 20vh;
+    width: 10vh;
+    background-color: #03254c42;
+    line-height: 19vh;
+}
+
