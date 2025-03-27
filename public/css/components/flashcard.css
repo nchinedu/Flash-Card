@@ -162,3 +162,26 @@ button:hover {
 .delete-card:hover {
     background: #c82333;
 }
+
+.deck-controls {
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.deck-selector {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    min-width: 200px;
+}
+
+.new-deck {
+    background: #17a2b8;
+}
+
+.new-deck:hover {
+    background: #138496;
+}
