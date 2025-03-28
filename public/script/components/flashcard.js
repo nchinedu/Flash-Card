@@ -1,9 +1,11 @@
 import { CardStorage } from '../utils/storage.js';
 import { DeckManager } from './deck.js';
+import { ProgressTracker } from '../utils/progress.js';
 
 export class FlashCard {
     constructor() {
         this.deckManager = new DeckManager();
+        this.progressTracker = new ProgressTracker();
         this.currentDeckId = 'default';
         this.currentIndex = 0;
         this.container = document.querySelector('.flash-card-container');
@@ -18,22 +20,24 @@ export class FlashCard {
 
     createCardInterface() {
         const cardUI = `
-            <div class="deck-controls">
-                <select class="deck-selector"></select>
-                <button class="new-deck">New Deck</button>
+            <div class="progress-stats">
+                <div class="stats-container">
+                    <span class="stats-label">Cards Studied:</span>
+                    <span class="stats-value" id="cards-studied">0</span>
+                </div>
+                <div class="stats-container">
+                    <span class="stats-label">Accuracy:</span>
+                    <span class="stats-value" id="accuracy">0%</span>
+                </div>
             </div>
             ${this.existingCardInterface}
+            <div class="rating-buttons" style="display: none;">
+                <button class="rate-btn" data-value="wrong">❌ Incorrect</button>
+                <button class="rate-btn" data-value="correct">✅ Correct</button>
+            </div>
         `;
         this.container.innerHTML = cardUI;
-        this.updateDeckSelector();
-    }
-
-    updateDeckSelector() {
-        const selector = this.container.querySelector('.deck-selector');
-        selector.innerHTML = Object.values(this.deckManager.decks)
-            .map(deck => `<option value="${deck.id}">${deck.name}</option>`)
-            .join('');
-        selector.value = this.currentDeckId;
+        this.updateStats();
     }
 
     bindEvents() {
@@ -138,8 +142,25 @@ export class FlashCard {
         front.textContent = currentCard.question;
         back.textContent = currentCard.answer;
     }
+
+    recordAnswer(isCorrect) {
+        this.progressTracker.recordCardReview(this.currentDeckId, isCorrect);
+        this.updateStats();
+        
+        // Auto-advance to next card after rating
+        setTimeout(() => {
+            this.showNextCard();
+            this.container.querySelector('.rating-buttons').style.display = 'none';
+        }, 500);
+    }
+
+    updateStats() {
+        const progress = this.progressTracker.getOverallProgress();
+        document.getElementById('cards-studied').textContent = progress.totalStudied;
+        document.getElementById('accuracy').textContent = `${progress.accuracy}%`;
+    }
 }
 
-export function initializeFlashCards() {
+export function FlashCards() {
     new FlashCard();
 }
