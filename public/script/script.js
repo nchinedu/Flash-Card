@@ -15,11 +15,35 @@ function shuffleOptions(question) {
 
 async function fetchQuizQuestions() {
     try {
-        const response = await fetch('https://flashcard-backend-beryl.vercel.app/db/first-cluster/questions');
+        const response = await fetch('https://flashcard-backend-beryl.vercel.app/db/first-cluster/questions', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            mode: 'cors'
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         return await response.json();
     } catch (e) {
         console.error('Error fetching quiz questions', e);
-        throw e;
+        // Fallback to local questions if API fails
+        return [
+            {
+                question: "What is HTML?",
+                options: ["Hypertext Markup Language", "High Tech Modern Language", "Hyper Transfer Markup Language", "None of these"],
+                correctAnswer: "Hypertext Markup Language"
+            },
+            {
+                question: "What is CSS?",
+                options: ["Cascading Style Sheets", "Computer Style Sheets", "Creative Style System", "None of these"],
+                correctAnswer: "Cascading Style Sheets"
+            }
+            // Add more fallback questions as needed
+        ];
     }
 }
 
