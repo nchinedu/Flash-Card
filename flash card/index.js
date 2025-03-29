@@ -1,15 +1,21 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const Flashcard = require('./public/models/flashcard'); // Adjust the path here
+const Flashcard = require('./public/models/flashcard');
 const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-mongoose.connect('mongodb+srv://nduluechinedu:1234@testcluster.9slnzsa.mongodb.net/?retryWrites=true&w=majority', 
-{tls: true,               // Enable TLS
-tlsAllowInvalidCertificates: true,
-ssl: true});
+mongoose.connect(process.env.MONGODB_URI, {
+    tls: true,
+    tlsAllowInvalidCertificates: true,
+    ssl: true
+}).then(() => {
+    console.log('Connected to MongoDB');
+}).catch((err) => {
+    console.error('MongoDB connection error:', err);
+});
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json()); // Middleware to parse JSON request body

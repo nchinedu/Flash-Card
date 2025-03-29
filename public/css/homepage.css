@@ -23,8 +23,8 @@ body {
     border-bottom: 5px dotted #2980b9;
 }
 
-
-button, select {
+button,
+select {
     margin-bottom: 10px;
     background-color: #3498db;
     color: #fff;
@@ -44,20 +44,30 @@ button:hover,
 
 #author-profiles {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    justify-content: space-around;
     margin-top: 20px;
 }
 
 .profile-box {
     color: white;
-    width: 30%;
+    width: 45%;
+    max-width: 300px;
     padding: 20px;
     margin-bottom: 20px;
-    margin-right: 20px;
     border: 1px solid #000;
     border-radius: 10px;
     background-color: rgba(52, 152, 219, 0.5);
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+/* Media query for iPods and Apple devices */
+@media only screen
+    and (max-device-width: 480px)
+    and (orientation: portrait) {
+    .profile-box {
+        width: 100%;
+    }
 }
 
 .profile-box:hover {
@@ -86,4 +96,3 @@ button:hover,
 .bottom-left .profile-box {
     margin-bottom: 0;
 }
-  
