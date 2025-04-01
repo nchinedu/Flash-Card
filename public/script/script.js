@@ -222,16 +222,233 @@ function closeModal() {
     window.location.href = '../../index.html';
 }
 
-function moveToNextQuestion() {
-    currentQuestionIndex++;
+let timer;
+let timeRemaining;
+let difficulty = 'medium';
 
-    if (currentQuestionIndex < quizQuestions.length) {
+function initializeQuiz() {
+    try {
+fetchQuizQuestions().then(questions => {
+    quizQuestions = questions;
+}).catch(error => {
+    console.error('Error fetching quiz questions:', error);
+});
+        console.log(quizQuestions)
+        shuffleArray(quizQuestions);
         displayQuestion();
-    } else {
-        openModal();
-        document.getElementById('user-score').textContent = userScore;
+    } catch (e) {
+        console.error('Error initializing quiz:', e);
     }
-    updateProgressBar();
+}
+
+// Remove duplicate declaration since selectedCategory is already declared above
+// Remove duplicate declaration since currentQuestionIndex is already declared above
+// let userScore = 0;
+
+document.querySelector('.close').addEventListener('click', closeModal);
+
+
+function displayQuestion() {
+    try {
+        const currentQuestion = quizQuestions[currentQuestionIndex];
+
+        if (!currentQuestion) {
+            throw new Error('No more questions available.');
+        }
+
+        shuffleOptions(currentQuestion);
+
+        // Check if the question has been answered before
+        const answeredCorrectly = currentQuestion.answeredCorrectly === true;
+        const answeredIncorrectly = currentQuestion.answeredCorrectly === false;
+
+        document.getElementById('question-text').innerHTML = `<h2>${currentQuestion.question}</h2>`;
+
+        const optionsContainer = document.getElementById('options-section');
+        optionsContainer.innerHTML = '';
+
+        currentQuestion.options.forEach((option) => {
+            const optionButton = document.createElement('button');
+            optionButton.textContent = option;
+
+            // Add classes based on the previous answer
+            if (answeredCorrectly) {
+                optionButton.classList.add('correct');
+            } else if (answeredIncorrectly && option === currentQuestion.correctAnswer) {
+                optionButton.classList.add('correct');
+            } else if (answeredIncorrectly && option === currentQuestion.userAnswer) {
+                optionButton.classList.add('incorrect');
+            }
+
+            optionButton.addEventListener('click', () => handleUserInput(option));
+            optionsContainer.appendChild(optionButton);
+        });
+    } catch (e) {
+
+    }
+}
+
+
+function handleUserInput(selectedOption) {
+    try {
+        const currentQuestion = quizQuestions[currentQuestionIndex];
+        const optionsContainer = document.getElementById('options-section');
+        optionsContainer.querySelectorAll('button').forEach(button => {
+            button.disabled = true;
+        });
+        currentQuestion.userAnswer = selectedOption;
+        currentQuestion.answeredCorrectly = selectedOption === currentQuestion.correctAnswer;
+
+        const selectedOptionIndex = currentQuestion.options.indexOf(selectedOption);
+        if (selectedOption === currentQuestion.correctAnswer) {
+            userScore++;
+            optionsContainer.querySelector(`button:nth-child(${selectedOptionIndex + 1})`).classList.add('correct');
+        } else {
+            optionsContainer.querySelector(`button:nth-child(${selectedOptionIndex + 1})`).classList.add('incorrect');
+            const correctOptionIndex = currentQuestion.options.indexOf(currentQuestion.correctAnswer);
+            optionsContainer.querySelector(`button:nth-child(${correctOptionIndex + 1})`).classList.add('correct');
+        }
+        optionsContainer.querySelectorAll('button').forEach(button => {
+            button.disabled = true;
+        });
+
+        setTimeout(() => {
+            optionsContainer.querySelectorAll('button').forEach(button => {
+                button.classList.remove('correct', 'incorrect');
+                button.disabled = false; // Re-enable buttons for the next question
+            });
+
+            moveToNextQuestion(); // Automatically move to the next question
+        }, 1000); // 1000 milliseconds (1 second) delay, adjust as needed
+    } catch (error) {
+        console.error('Error handling user input:', error.message);
+        document.getElementById('error-message').textContent = 'Error processing your answer. Please try again.';
+    }
+}
+
+function displayIncorrectAnswers() {
+    const modalContent = document.querySelector('.modal-content');
+    const incorrectAnswersContainer = document.createElement('div');
+    incorrectAnswersContainer.classList.add('incorrect-answers-container');
+
+    // Filter questions that were answered incorrectly
+    const incorrectQuestions = quizQuestions.filter(question => question.answeredCorrectly === false);
+
+    incorrectQuestions.forEach((question, index) => {
+        const questionContainer = document.createElement('div');
+        questionContainer.classList.add('question-container');
+
+        const questionText = document.createElement('p');
+        questionText.textContent = `${index + 1}. ${question.question}`;
+        questionContainer.appendChild(questionText);
+
+        const userAnswer = document.createElement('p');
+        userAnswer.textContent = `Your Answer: ${question.userAnswer}`;
+        questionContainer.appendChild(userAnswer);
+
+        const correctAnswer = document.createElement('p');
+        correctAnswer.textContent = `Correct Answer: ${question.correctAnswer}`;
+        questionContainer.appendChild(correctAnswer);
+
+        // incorrectAnswersContainer.appendChild(questionContainer);
+    });
+
+    modalContent.appendChild(incorrectAnswersContainer);
+}
+
+function openModal() {
+    const modal = document.getElementById('quiz-completion-modal');
+    const body = document.body;
+    body.classList.add('modal-open');
+    modal.style.display = 'block';
+
+    // Display the user's score in the modal
+    document.getElementById('user-score').textContent = userScore;
+
+    // Add buttons for trying again and exiting
+    const modalContent = document.querySelector('.modal-content');
+    const buttonsContainer = document.createElement('div');
+    buttonsContainer.classList.add('buttons-container');
+
+    const tryAgainButton = document.createElement('button');
+    tryAgainButton.textContent = 'Try Again';
+    tryAgainButton.addEventListener('click', tryAgain);
+
+    const exitButton = document.createElement('button');
+    exitButton.textContent = 'Exit';
+    exitButton.addEventListener('click', exitQuiz);
+
+    buttonsContainer.appendChild(tryAgainButton);
+    buttonsContainer.appendChild(exitButton);
+    modalContent.appendChild(buttonsContainer);
+
+    // Add a class to indicate completion
+    document.getElementById('quiz-container').classList.add('completed');
+    modal.classList.add('completed');
+
+    // Display incorrect answers
+    displayIncorrectAnswers();
+    displayScoreChart();
+}
+
+function closeModal() {
+    const modal = document.getElementById('quiz-completion-modal');
+    const body = document.body;
+    body.classList.remove('modal-open')
+
+    currentQuestionIndex = 0;
+    userScore = 0;
+    document.getElementById('quiz-container').classList.remove('completed');
+
+    modal.classList.remove('completed');
+    modal.style.display = 'none';
+    window.location.href = '../../index.html';
+}
+
+function startTimer() {
+    timeRemaining = difficulty === 'easy' ? 60 : difficulty === 'medium' ? 45 : 30;
+    updateTimerDisplay();
+    
+    timer = setInterval(() => {
+        timeRemaining--;
+        updateTimerDisplay();
+        
+        if (timeRemaining <= 0) {
+            clearInterval(timer);
+            handleTimeUp();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    document.getElementById('time-remaining').textContent = timeRemaining;
+}
+
+function handleTimeUp() {
+    const currentQuestion = quizQuestions[currentQuestionIndex];
+    currentQuestion.answeredCorrectly = false;
+    moveToNextQuestion();
+}
+
+function resetQuiz() {
+    clearInterval(timer);
+    currentQuestionIndex = 0;
+    score = 0;
+    fetchQuizQuestions().then(() => {
+        displayQuestion();
+        startTimer();
+    });
+}
+
+function moveToNextQuestion() {
+    clearInterval(timer);
+    if (currentQuestionIndex < quizQuestions.length - 1) {
+        currentQuestionIndex++;
+        displayQuestion();
+        startTimer();
+    } else {
+        showResults();
+    }
 }
 
 function updateProgressBar() {
