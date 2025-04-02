@@ -5,13 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="icon" href="../images/quizzes.png" type="images/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <title>Flashcard Quiz</title>
 </head>
 <body>
 
 <div id="quiz-container">
+    <div class="quiz-header">
+        <div class="timer">Time: <span id="time-remaining">60</span>s</div>
+        <select id="difficulty-selector">
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+        </select>
+    </div>
 
     <div id="progress-bar-container">
         <div id="progress-bar"></div>
@@ -34,7 +41,7 @@
 
 <div id="error-message"></div>
 <footer>
-    <p>&copy; 2024 Flashcard Group13 Quiz App</p>
+    <p>&copy; 2024 Flashcard Quiz App</p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
