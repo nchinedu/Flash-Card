@@ -1,5 +1,6 @@
 import Quiz from './components/Quiz.js';
 import quizService from './services/quizService.js';
+import { handleError, QuizError } from './utils/errorHandler.js';
 
 
 documnet.addEventListener('DOMContentLoaded', () => {
@@ -8,6 +9,12 @@ documnet.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     updateTheme();
 });
+let selectedCategory = 'all';
+let currentQuestionIndex = 0;
+let userScore = 0;
+
+document.querySelector('.close').addEventListener('click', closeModal);
+
 function setupEventListeners() {
     document.querySelector('.close')?.addEventListener('click', closeModal);
     document.getElementById('difficulty-selector')?.addEventListener('change', (e) => {
@@ -67,10 +74,11 @@ async function fetchQuizQuestions() {
     }
 }
 async function initializeQuiz() {
+    const errorElement = document.getElementById('error-message');
     try {
         const questions = await quizService.fetchQuizQuestions();
         if (!questions || questions.length === 0) {
-            throw new Error ('No questions available');
+            throw new Error ('No questions available', 'data');
         }
             quizQuestions = questions;
             shuffleArray(quizQuestions);
@@ -83,19 +91,15 @@ async function initializeQuiz() {
     }
 }
 
-let selectedCategory = 'all';
-let currentQuestionIndex = 0;
-let userScore = 0;
-
-document.querySelector('.close').addEventListener('click', closeModal);
 
 
 function displayQuestion() {
+    const errorElement = document.getElementById('error-message');
     try {
         const currentQuestion = quizQuestions[currentQuestionIndex];
 
         if (!currentQuestion) {
-            throw new Error('No more questions available.');
+            throw new Error('No more questions available.','navigation');
         }
         document.getElementById('question-text').innerHTML = `<h2>${currentQuestion.question}</h2>`;
 
@@ -110,8 +114,8 @@ function displayQuestion() {
         });
         updateProgressBar();
     } catch (e) {
-        console.error('Error displaying question:', error);
-        document.getElementById('error-message').textContent = 'Failed to load quiz questions. Please try again.';
+        handleError(e, errorElement)
+        moveToNextQuestion();
     }
         // shuffleOptions(currentQuestion);
 
@@ -186,6 +190,7 @@ function displayQuestion() {
 //     }
 // }
 function handleUserInput(selectedOption) {
+    const errorElement = document.getElementById('error-message');
     try {
         const currentQuestion = quizQuestions[currentQuestionIndex];
         const optionsContainer = document.getElementById('options-section');

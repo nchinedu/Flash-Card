@@ -199,8 +199,33 @@ footer {
 }
 
 #error-message {
-    color: var(--error-color);
-    font-size: 14px;
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #ff5252;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+}
+
+#error-message.show {
+    display: block;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 .question-grid button:hover {
