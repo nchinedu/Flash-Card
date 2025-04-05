@@ -1,3 +1,9 @@
+import Quiz from './components/Quiz.js';
+
+documnet.addEventListener('DOMContentLoaded', () => {
+    const quiz = new Quiz();
+    quiz.initializeQuiz();
+});
 let quizQuestions = [];
 
 function shuffleArray(array) {
