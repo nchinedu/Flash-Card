@@ -1,14 +1,30 @@
 import API_CONFIG from '../config/api.js';
 
 class QuizService {
-    async getQuestions() {
+    async fetchQuestions() {
         try {
             const response = await fetch(`${API_CONFIG.baseURL}${API_CONFIG.endpoints.questions}`);
-            if (!response.ok) throw new Error('Failed to fetch questions');
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             return await response.json();
         } catch (error) {
-            console.error('Quiz service error:', error);
+            console.error('Error fetching questions:', error);
             return this.getFallbackQuestions();
+        }
+    }
+
+    async saveStats(stats) {
+        try {
+            const response = await fetch(`${API_CONFIG.baseURL}${API_CONFIG.endpoints.stats}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(stats)
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Error saving stats:', error);
+            return null;
         }
     }
 

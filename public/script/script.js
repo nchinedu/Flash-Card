@@ -1,4 +1,6 @@
 import Quiz from './components/Quiz.js';
+import quizService from './services/quizService.js';
+
 
 documnet.addEventListener('DOMContentLoaded', () => {
     const quiz = new Quiz();
@@ -57,11 +59,12 @@ async function fetchQuizQuestions() {
 }
 async function initializeQuiz() {
     try {
-        const questions = await fetchQuizQuestions();
+        const questions = await quizService.fetchQuizQuestions();
         if (questions && questions.length > 0) {
             quizQuestions = questions;
             shuffleArray(quizQuestions);
             displayQuestion();
+            startTimer();
         } else {
             throw new Error('No questions available');
         }
@@ -119,7 +122,7 @@ function displayQuestion() {
 }
 
 
-function handleUserInput(selectedOption) {
+async function handleUserInput(selectedOption) {
     try {
         const currentQuestion = quizQuestions[currentQuestionIndex];
         const optionsContainer = document.getElementById('options-section');
@@ -140,6 +143,11 @@ function handleUserInput(selectedOption) {
         }
         optionsContainer.querySelectorAll('button').forEach(button => {
             button.disabled = true;
+        });
+        await quizService.saveStats({
+            questionId: currentQuestion.id,
+            correct: currentQuestion.answeredCorrectly,
+            timeSpent: 60 - timeRemaining
         });
 
         setTimeout(() => {

@@ -2,7 +2,8 @@ const API_CONFIG = {
     baseURL: 'http://localhost:3000/api',
     endpoints: {
         questions: '/quiz/questions',
-        stats: '/quiz/stats'
+        stats: '/quiz/stats',
+        categories: '/quiz/categories'
     }
 };
 
