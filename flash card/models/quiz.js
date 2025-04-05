@@ -5,18 +5,13 @@ const quizSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    options: {
-        type: [String],
+    options: [{
+        type: String,
         required: true
-    },
+    }],
     correctAnswer: {
         type: String,
         required: true
-    },
-    difficulty: {
-        type: String,
-        enum: ['easy', 'medium', 'hard'],
-        default: 'medium'
     }
 });
 

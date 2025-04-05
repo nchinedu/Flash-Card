@@ -1,10 +1,12 @@
-let quizQuestions;
+let quizQuestions = [];
 
 function shuffleArray(array) {
+    if (!array || array.length === 0) return []; // Add check for undefined or empty array
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
+    return array;
 }
 
 function shuffleOptions(question) {
@@ -19,8 +21,10 @@ async function fetchQuizQuestions() {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Origin': 'http://localhost:8080'
             },
+            credentials: 'include',
             mode: 'cors'
         });
         
@@ -30,7 +34,7 @@ async function fetchQuizQuestions() {
         return await response.json();
     } catch (e) {
         console.error('Error fetching quiz questions', e);
-        // Fallback to local questions if API fails
+        // Using fallback questions when API fails
         return [
             {
                 question: "What is HTML?",
@@ -42,19 +46,22 @@ async function fetchQuizQuestions() {
                 options: ["Cascading Style Sheets", "Computer Style Sheets", "Creative Style System", "None of these"],
                 correctAnswer: "Cascading Style Sheets"
             }
-            // Add more fallback questions as needed
         ];
     }
 }
-
 async function initializeQuiz() {
     try {
-        quizQuestions = await fetchQuizQuestions();
-        console.log(quizQuestions)
-        shuffleArray(quizQuestions);
-        displayQuestion();
+        const questions = await fetchQuizQuestions();
+        if (questions && questions.length > 0) {
+            quizQuestions = questions;
+            shuffleArray(quizQuestions);
+            displayQuestion();
+        } else {
+            throw new Error('No questions available');
+        }
     } catch (e) {
         console.error('Error initializing quiz:', e);
+        document.getElementById('error-message').textContent = 'Failed to load quiz questions. Please try again.';
     }
 }
 
@@ -292,7 +299,7 @@ function displayQuestion() {
 function handleUserInput(selectedOption) {
     try {
         const currentQuestion = quizQuestions[currentQuestionIndex];
-        const optionsContainer = document.getElementById('options-section');
+        const optionsContainer = document.getElementBletyId('options-section');
         optionsContainer.querySelectorAll('button').forEach(button => {
             button.disabled = true;
         });
