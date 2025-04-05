@@ -5,39 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="icon" href="../images/quizzes.png" type="images/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Flashcard Quiz</title>
 </head>
 <body>
+    <div id="quiz-container">
+        <div class="quiz-header">
+            <div class="timer">Time: <span id="time-remaining">60</span>s</div>
+            <select id="difficulty-selector">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+        </div>
 
-<div id="quiz-container">
-
-    <div id="progress-bar-container">
-        <div id="progress-bar"></div>
+        <div id="progress-bar-container">
+            <div id="progress-bar"></div>
+        </div>
+        <div id="question-section">
+            <h2 id="question-text"></h2>
+        </div>
+        <div id="options-section"></div>
     </div>
-    <div id="question-section">
-        <h2 id="question-text"></h2>
+
+    <div id="quiz-completion-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Quiz Completed!</h2>
+            <p>Your Score: <span id="user-score">0</span></p>
+            <div id="chart-container"></div>
+        </div>
     </div>
 
-    <div id="options-section"></div>
-</div>
+    <div id="error-message"></div>
+    <footer>
+        <p>&copy; 2024 Flashcard Quiz App</p>
+    </footer>
 
-<div id="quiz-completion-modal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h2>Quiz Completed!</h2>
-        <p>Your Score: <span id="user-score">0</span></p>
-    </div>
-
-</div>
-
-<div id="error-message"></div>
-<footer>
-    <p>&copy; 2024 Flashcard Quiz App</p>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="../script/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="../script/script.js"></script>
 </body>
 </html>
