@@ -3,15 +3,14 @@ function navigateToHomepage() {
     const selectedOption = dropdown.options[dropdown.selectedIndex].value;
 
     switch (selectedOption) {
-
         case "quiz":
-            loadPage("public/pages/quiz.html", "../css/style.css")
+            loadPage("public/pages/quiz.html", "public/css/style.css")
             break;
         case "Flashcard":
-                loadPage("flash card/flashcard.html", "../css/style.css")
-                break;
+            loadPage("public/pages/flashcard.html", "public/css/components/flashcard.css")
+            break;
         default:
-        // Handle the default case or add additional cases as needed
+            // Handle the default case or add additional cases as needed
     }
 }
 
