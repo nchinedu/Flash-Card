@@ -4,6 +4,7 @@ export class QuizError extends Error {
         this.type = type;
         this.timestamp = new Date();
         this.recoveryAttempts = 0;
+        this.animationState = 'initial';
     }
 }
 
@@ -29,34 +30,42 @@ export const handleError = (error, errorElement) => {
 
 function createRecoveryUI(error) {
     const container = document.createElement('div');
-    container.className = 'error-recovery-container';
+    container.className = 'error-recovery-container animate-slide-in';
 
     const messageEl = document.createElement('p');
     messageEl.textContent = error.message;
+    messageEl.className = 'error-message animate-fade-in';
     container.appendChild(messageEl);
 
     const actions = document.createElement('div');
-    actions.className = 'recovery-actions';
+    actions.className = 'recovery-actions animate-scale-in';
 
-    // Retry button
+    // Enhanced buttons with animations
     const retryBtn = createActionButton('Retry', () => {
-        error.recoveryAttempts++;
-        window.location.reload();
+        animateButtonClick(retryBtn);
+        setTimeout(() => {
+            error.recoveryAttempts++;
+            window.location.reload();
+        }, 300);
     });
 
-    // Skip button
     const skipBtn = createActionButton('Skip Question', () => {
-        document.dispatchEvent(new CustomEvent('quiz-skip-question'));
+        animateButtonClick(skipBtn);
+        setTimeout(() => {
+            document.dispatchEvent(new CustomEvent('quiz-skip-question'));
+        }, 300);
     });
 
-    // Offline Mode button
     const offlineBtn = createActionButton('Continue Offline', () => {
-        localStorage.setItem('quiz-offline-mode', 'true');
-        window.location.reload();
+        animateButtonClick(offlineBtn);
+        setTimeout(() => {
+            localStorage.setItem('quiz-offline-mode', 'true');
+            window.location.reload();
+        }, 300);
     });
 
-    // Help button
     const helpBtn = createActionButton('Get Help', () => {
+        animateButtonClick(helpBtn);
         showHelpModal(error);
     });
 
@@ -66,26 +75,25 @@ function createRecoveryUI(error) {
     return container;
 }
 
-function createActionButton(text, onClick) {
-    const button = document.createElement('button');
-    button.textContent = text;
-    button.className = 'recovery-action-btn';
-    button.addEventListener('click', onClick);
-    return button;
+function animateButtonClick(button) {
+    button.classList.add('animate-click');
+    setTimeout(() => button.classList.remove('animate-click'), 300);
 }
 
 function showHelpModal(error) {
     const modal = document.createElement('div');
-    modal.className = 'help-modal';
+    modal.className = 'help-modal animate-modal';
     modal.innerHTML = `
-        <div class="help-content">
-            <h3>Error Details</h3>
-            <p>Type: ${error.type}</p>
-            <p>Time: ${error.timestamp.toLocaleString()}</p>
-            <p>Recovery Attempts: ${error.recoveryAttempts}</p>
-            <div class="help-actions">
-                <button onclick="window.location.href='/support'">Contact Support</button>
-                <button onclick="this.parentElement.parentElement.parentElement.remove()">Close</button>
+        <div class="help-content animate-content">
+            <h3 class="animate-title">Error Details</h3>
+            <div class="error-info animate-info">
+                <p>Type: ${error.type}</p>
+                <p>Time: ${error.timestamp.toLocaleString()}</p>
+                <p>Recovery Attempts: ${error.recoveryAttempts}</p>
+            </div>
+            <div class="help-actions animate-actions">
+                <button class="support-btn" onclick="window.location.href='/support'">Contact Support</button>
+                <button class="close-btn" onclick="this.closest('.help-modal').classList.add('animate-modal-out'); setTimeout(() => this.closest('.help-modal').remove(), 300)">Close</button>
             </div>
         </div>
     `;
@@ -94,7 +102,18 @@ function showHelpModal(error) {
 
 export const clearError = (errorElement) => {
     if (errorElement) {
-        errorElement.innerHTML = '';
-        errorElement.classList.remove('show');
+        errorElement.classList.add('animate-fade-out');
+        setTimeout(() => {
+            errorElement.innerHTML = '';
+            errorElement.classList.remove('show', 'animate-fade-out');
+        }, 300);
     }
 };
+
+function createActionButton(text, onClick) {
+    const button = document.createElement('button');
+    button.textContent = text;
+    button.className = 'recovery-action-btn';
+    button.addEventListener('click', onClick);
+    return button;
+}
